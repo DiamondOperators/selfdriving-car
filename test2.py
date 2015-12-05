@@ -5,7 +5,7 @@ import math
 class CarWindow(object):
     def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=600, height=400)
-        self.rw = 20
+        self.rw = 30
         self.road = []
         self.lines = []
 
@@ -39,23 +39,12 @@ class CarWindow(object):
             x = self.rw * math.sin(alpha)
             y = self.rw * math.cos(alpha)
 
-            ##            if (x_diff > 0):
-            ##                if (y_diff > 0):
-            ##                    outerPoints.append(Point(pt1.x - x, pt1.y - y))
-            ##                    outerPoints.append(Point(pt2.x - x, pt2.y - y))
-            ##                else:
-            ##                    outerPoints.append(Point(pt1.x - x, pt1.y + y))
-            ##                    outerPoints.append(Point(pt2.x - x, pt2.y + y))
-            ##            else:
-            ##                if (y_diff > 0):
-            ##                    outerPoints.append(Point(pt1.x + x, pt1.y - y))
-            ##                    outerPoints.append(Point(pt2.x + x, pt2.y - y))
-            ##                else:
-            ##                    outerPoints.append(Point(pt1.x + x, pt1.y + y))
-            ##                    outerPoints.append(Point(pt2.x + x, pt2.y + y))
-
-            outer_points.append(Point(pt1.x - x, pt1.y - y))
-            outer_points.append(Point(pt2.x - x, pt2.y - y))
+            if x_diff < 0:
+                outer_points.append(Point(pt1.x - x, pt1.y + y))
+                outer_points.append(Point(pt2.x - x, pt2.y + y))
+            else:
+                outer_points.append(Point(pt1.x + x, pt1.y - y))
+                outer_points.append(Point(pt2.x + x, pt2.y - y))
 
         # Outer lines
         for i in range(0, len(outer_points)):
@@ -71,7 +60,9 @@ class CarWindow(object):
 
 # Test
 carWindow = CarWindow()
-pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(400, 300),
-       Point(150, 320)]
+pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
+       Point(300, 340), Point(150, 320), Point(50, 250)]  # pts = [Point(100, 100), Point(160, 60)]
 carWindow.set_road(pts)
 carWindow.draw()
+
+input("Press any key to exit")
