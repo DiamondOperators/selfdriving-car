@@ -7,7 +7,7 @@ class Car(object):
         self.ann = ann
 
     def update_direction(self, sensor_data):
-        self.direction = self.ann.adjust_direction(sensor_data)
+        self.direction += self.ann.propagate_forward(sensor_data)
 
     def set_position(self, x, y):
         self.x = x

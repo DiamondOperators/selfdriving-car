@@ -20,7 +20,7 @@ A neuroevolutionary self driving software car.
   - Nodes en weights.
   - Weights zijn variabel
   - Inputs: data van sensoren van auto
-  - Output: stuur draaien
+  - Output: waarde van -1 (60 graden naar links) tot 1 (60 graden naar rechts) (of zo)
 
 ###### Evolueerder
   - Neemt ANNs en test en reproduceert ze:
