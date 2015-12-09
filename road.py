@@ -5,9 +5,10 @@ import math
 class Road(object):
     def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=600, height=400)
-        self.rw = 30
+        self.rw = 30  # Road width
         self.road = []
         self.lines = []
+        self.cars = []
 
     def set_road(self, points):
         self.road = points
@@ -56,6 +57,35 @@ class Road(object):
     def draw(self):
         for line in self.lines:
             line.draw(self.win)
+
+    def next_step(self):
+        pass
+
+    def test(self, cars):
+        self.cars = cars
+
+        step_time = 1
+
+        while self.not_all_cars_collided():
+            for car in cars:
+                if car.collide_distance != -1:
+                    break
+                car.update_direction(self.get_sensor_data(car))
+
+                x_diff = math.cos(car.direction) * step_time * car.speed
+                y_diff = math.sin(car.direction) * step_time * car.speed
+                car.add_position(x_diff, y_diff)
+
+        return cars
+
+    def not_all_cars_collided(self):
+        for car in self.cars:
+            if car.collide_distance == -1:
+                return True
+        return False
+
+    def get_sensor_data(self, car):
+        pass
 
 
 # Test
