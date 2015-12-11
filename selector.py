@@ -25,7 +25,7 @@ class Selector:
             for c in range(len(self.cars)):
                 if self.cars[c].collide_distance > self.cars[best_car_index].collide_distance:
                     best_car_index = c
-            best_performing.append(best_car_index)
+            best_performing.append(self.cars.pop(best_car_index))
 
         # Create new generation with best_performing as parents
         new_generation = []
