@@ -1,5 +1,4 @@
 import tensorflow as tf
-import random
 
 
 class ANN:
@@ -11,7 +10,7 @@ class ANN:
         self.x = tf.placeholder("float", shape=[self.inputNodes, None], name="sensor-input")
         self.W1 = tf.placeholder("float", shape=[self.inputNodes, self.hiddenNodes])
         self.W2 = tf.placeholder("float", shape=[self.hiddenNodes, self.outputNodes])
-        self.y = tf.matmul(tf.matmul(self.x, self.W1), self.W2)
+        self.y = tf.tanh(tf.matmul(tf.tanh(tf.matmul(self.x, self.W1)), self.W2))
 
         self.session = tf.Session()
         init = tf.initialize_all_variables()

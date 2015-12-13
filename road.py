@@ -1,9 +1,10 @@
-from graphics import *
 import math
+
+from graphics import *
 
 
 class Road(object):
-	def __init__(self):
+    def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=600, height=400)
         self.rw = 30  # Road width
         self.road = []

@@ -1,9 +1,9 @@
 # "Evolueerder"
 
+from tensorflow import *
+
 from car import *
 from road import *
-from ANN import *
-from tensorflow import *
 
 
 class Selector:
@@ -15,7 +15,7 @@ class Selector:
     def initial_generation(self):
         # Add 50 random cars
         self.cars = []
-        for i in range(50):
+        for i in xrange(0, 50):
             car = Car()
             self.cars.append(car)
 
@@ -24,7 +24,7 @@ class Selector:
         best_performing = []
         for i in xrange(25):
             best_car_index = 0
-            for c in range(len(self.cars)):
+            for c in range(0, len(self.cars)):
                 if self.cars[c].collide_distance > self.cars[best_car_index].collide_distance:
                     best_car_index = c
             best_performing.append(self.cars.pop(best_car_index))
@@ -38,10 +38,10 @@ class Selector:
         self.cars = []
         self.cars.append(car for car in best_performing)
         self.cars.append(car for car in new_generation)
-        
+
     def test_generation(self):
-      self.cars = self.road.test(cars)
-      self.create_next_generation()
+        self.cars = self.road.test(self.cars)
+        self.create_next_generation()
 
     @staticmethod
     def make_road():
