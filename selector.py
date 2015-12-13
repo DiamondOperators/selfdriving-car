@@ -2,6 +2,8 @@
 
 from car import *
 from road import *
+from ANN import *
+from tensorflow import *
 
 
 class Selector:
@@ -36,6 +38,10 @@ class Selector:
         self.cars = []
         self.cars.append(car for car in best_performing)
         self.cars.append(car for car in new_generation)
+        
+    def test_generation(self):
+      self.cars = self.road.test(cars)
+      self.create_next_generation()
 
     @staticmethod
     def make_road():
