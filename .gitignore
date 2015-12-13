@@ -1,3 +1,4 @@
 *.pyc
 /.idea
 .codenvy
+requirements.txt
