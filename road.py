@@ -11,6 +11,7 @@ class Road(object):
         self.lines = []
         self.cars = []
         self.finish = None
+        self.margin = 2
 
     def set_road(self, points, finish):
         self.road = points
@@ -78,6 +79,10 @@ class Road(object):
                 x_diff = math.cos(car.direction) * step_time * car.speed
                 y_diff = math.sin(car.direction) * step_time * car.speed
                 car.add_position(x_diff, y_diff)
+
+                if self.car_collided(car):
+                    # TODO car.collide_distance bepalen
+                    pass
             self.redraw()
         return cars
 
@@ -85,6 +90,40 @@ class Road(object):
         for car in self.cars:
             if car.collide_distance == -1:
                 return True
+        return False
+
+    def car_collided(self, car):
+        # Afstand van punt tot lijn.
+        # Lijn:
+        #   ax + by + c = 0
+        # Punt:
+        #   (p, q)
+        # Formule voor afstand:
+        #   |ap + bq + c| / sqrt(a^2 + b^2)
+
+        # Vergelijking van lijn opstelling aan de hand van twee punten (s en t):
+        # (sy - ty)x + (tx - sx)y + (sxty - txsy) = 0
+        # Dus:
+        #   a = sy - ty
+        #   b = tx - sx
+        #   c = sx*ty - tx*sy
+
+        for line in self.lines:
+            s = line.p1, t = line.p2
+
+            # Eerst kijken of de auto binnen het bereik van de lijn is:
+            if car.x < min(s.x, t.x) or car.x > max(s.x, t.x) or car.y < min(s.y, t.y) or car.y > max(s.y, t.y):
+                continue
+
+            # Afstand uitrekenen
+            a = s.y - t.y
+            b = t.x - s.x
+            c = s.x * t.y - t.x * s.y
+            distance = abs(a * car.x + b * car.y + c) / math.sqrt(a ** 2 + b ** 2)
+
+            if distance < self.margin:
+                return True
+
         return False
 
     def get_sensor_data(self, car):
