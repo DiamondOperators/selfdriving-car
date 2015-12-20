@@ -1,9 +1,8 @@
 # "Evolueerder"
 
 from tensorflow import *
-
-from car import *
 from road import *
+from car import *
 
 
 class Selector:
@@ -46,5 +45,5 @@ class Selector:
         new_road = Road()
         points = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
                   Point(300, 340), Point(150, 320), Point(50, 250)]
-        new_road.set_road(points)
+        new_road.set_road(points, Point(300, 35))
         return new_road

@@ -1,6 +1,5 @@
 import math
 from graphics import *
-from car import *
 
 
 class Road(object):
@@ -82,7 +81,7 @@ class Road(object):
 
                 if self.car_collided(car):
                     # TODO car.collide_distance bepalen
-                    pass
+                    car.collide_distance = 2  # Random
             self.redraw()
         return cars
 
@@ -130,11 +129,12 @@ class Road(object):
         pass
 
 
-# Test
-road = Road()
-pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
-       Point(300, 340), Point(150, 320), Point(50, 250)]  # pts = [Point(100, 100), Point(160, 60)]
-road.set_road(pts, Point(300, 35))
-road.redraw()
+def test():
+    # Test
+    road = Road()
+    pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
+           Point(300, 340), Point(150, 320), Point(50, 250)]  # pts = [Point(100, 100), Point(160, 60)]
+    road.set_road(pts, Point(300, 35))
+    road.redraw()
 
-input("Press any key to exit")
+    input("Press any key to exit")
