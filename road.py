@@ -1,6 +1,6 @@
 import math
-
 from graphics import *
+from car import *
 
 
 class Road(object):
@@ -10,10 +10,12 @@ class Road(object):
         self.road = []
         self.lines = []
         self.cars = []
+        self.finish = None
 
-    def set_road(self, points):
+    def set_road(self, points, finish):
         self.road = points
         self.make_lines()
+        self.finish = finish
 
     def make_lines(self):
         self.lines = []
@@ -55,12 +57,12 @@ class Road(object):
             else:
                 self.lines.append(Line(outer_points[i], outer_points[i + 1]))
 
-    def draw(self):
+    def redraw(self):
         for line in self.lines:
             line.draw(self.win)
-
-    def next_step(self):
-        pass
+        self.finish.draw(self.win)
+        for car in self.cars:
+            Point(car.x, car.y).draw(self.win)
 
     def test(self, cars):
         self.cars = cars
@@ -76,7 +78,7 @@ class Road(object):
                 x_diff = math.cos(car.direction) * step_time * car.speed
                 y_diff = math.sin(car.direction) * step_time * car.speed
                 car.add_position(x_diff, y_diff)
-
+            self.redraw()
         return cars
 
     def not_all_cars_collided(self):
@@ -93,7 +95,7 @@ class Road(object):
 road = Road()
 pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
        Point(300, 340), Point(150, 320), Point(50, 250)]  # pts = [Point(100, 100), Point(160, 60)]
-road.set_road(pts)
-road.draw()
+road.set_road(pts, Point(300, 35))
+road.redraw()
 
 input("Press any key to exit")
