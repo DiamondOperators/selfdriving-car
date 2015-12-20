@@ -1,5 +1,4 @@
 import random
-
 import main
 
 
@@ -36,7 +35,19 @@ class Car(object):
             self.W2.append(w2i)
 
     def random_weights(self):
-        pass
+        self.W1 = []
+        for i in range(main.ann.inputNodes):
+            w1i = []
+            for j in range(main.ann.hiddenNodes):
+                w1i.append(random.random() * 2 - 1)
+            self.W1.append(w1i)
+
+        self.W2 = []
+        for i in range(main.ann.hiddenNodes):
+            w2i = []
+            for j in range(main.ann.outputNodes):
+                w2i.append(random.random() * 2 - 1)
+            self.W2.append(w2i)
 
     def update_direction(self, sensor_data):
         self.direction += main.ann.propagate_forward(self, sensor_data)

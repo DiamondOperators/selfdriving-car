@@ -10,7 +10,6 @@ class Selector:
     def __init__(self):
         self.road = self.make_road()
         self.cars = []
-        self.initial_generation()
 
     def initial_generation(self):
         # Add 50 random cars
@@ -41,7 +40,6 @@ class Selector:
 
     def test_generation(self):
         self.cars = self.road.test(self.cars)
-        self.create_next_generation()
 
     @staticmethod
     def make_road():
