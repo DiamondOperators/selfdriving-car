@@ -42,14 +42,14 @@ class Car(object):
         for i in range(main.ann.inputNodes):
             w1i = []
             for j in range(main.ann.hiddenNodes):
-                w1i.append(random.random() * 2 - 1)
+                w1i.append(random.random() * .1 - .05)
             self.W1.append(w1i)
 
         self.W2 = []
         for i in range(main.ann.hiddenNodes):
             w2i = []
             for j in range(main.ann.outputNodes):
-                w2i.append(random.random() * 2 - 1)
+                w2i.append(random.random() * .1 - .05)
             self.W2.append(w2i)
 
     def update_direction(self, sensor_data):
