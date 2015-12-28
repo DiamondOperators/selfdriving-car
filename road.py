@@ -73,6 +73,13 @@ class Road(object):
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
 
+    def reset_win(self):
+        self.win.close()
+        self.win = GraphWin(title="Self-driving car", width=600, height=400)
+        # Also clear self.cars array, to start with a clean window
+        self.cars = []
+        self.redraw()
+
     def test(self, cars):
         self.cars = cars
 

@@ -1,6 +1,5 @@
 # "Evolueerder"
 
-from tensorflow import *
 from road import *
 from car import *
 
