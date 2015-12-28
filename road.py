@@ -82,7 +82,7 @@ class Road(object):
         step_time = 1
 
         while self.not_all_cars_collided():
-            for car in cars:
+            for car in self.cars:
                 if car.collide_distance != -1:
                     continue
                 car.update_direction(self.get_sensor_data(car))
@@ -96,7 +96,7 @@ class Road(object):
                     car.collide_distance = 2  # Random
             self.redraw()
         print "All cars collided"
-        return cars
+        return self.cars
 
     def reset_car_positions(self):
         for car in self.cars:

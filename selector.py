@@ -15,28 +15,23 @@ class Selector:
         # Add {self.population_size} random cars
         self.cars = []
         for i in xrange(0, self.population_size):
-            car = Car()
-            self.cars.append(car)
+            self.cars.append(Car())
 
     def create_next_generation(self):
-        # Select best performing cars
-        best_performing = []
-        for i in xrange(self.population_size / 2):
-            best_car_index = 0
-            for c in range(0, len(self.cars)):
-                if self.cars[c].collide_distance > self.cars[best_car_index].collide_distance:
-                    best_car_index = c
-            best_performing.append(self.cars.pop(best_car_index))
+        # Sort cars by collide_distance descending
+        # Uses bubblesort algorithm
+        for h in xrange(1, len(self.cars) - 1):
+            i = len(self.cars) - h  # i gaat dus van len(self.cars) naar (en inclusief) 2
+            for j in xrange(0, i):
+                if self.cars[j].collide_distance < self.cars[j + 1].collide_distance:
+                    temp = self.cars[j]
+                    self.cars[j] = self.cars[j + 1]
+                    self.cars[j + 1] = temp
 
-        # Create new generation with best_performing as parents
-        new_generation = []
-        for i in xrange(self.population_size / 2):
-            new_generation.append(Car(best_performing))
-
-        # Add best_performing and new_generation to self.cars
-        self.cars = []
-        self.cars.append(car for car in best_performing)
-        self.cars.append(car for car in new_generation)
+        # The best 25 cars are now in the first 25 indices of the array.
+        # Substitute the last 25 cars in the array with new ones.
+        for i in xrange(len(self.cars) / 2, len(self.cars)):
+            self.cars[i] = Car(self.cars, len(self.cars) / 2)
 
     def test_generation(self):
         self.cars = self.road.test(self.cars)

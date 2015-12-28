@@ -3,7 +3,7 @@ import main
 
 
 class Car(object):
-    def __init__(self, parents=None, collide_distance=-1, direction=0, x=0, y=0):
+    def __init__(self, parents=None, parents_limit=None, collide_distance=-1, direction=0, x=0, y=0):
         self.x = x
         self.y = y
         self.speed = 1  # px per second
@@ -16,24 +16,27 @@ class Car(object):
         self.sensor_range = 50
 
         if parents is not None:
-            self.inherit_from(parents)
+            if parents_limit is None:
+                parents_limit = len(parents)
+            self.inherit_from(parents, parents_limit)
         else:
             self.random_weights()
 
-    def inherit_from(self, parents):
+    def inherit_from(self, parents, limit):
         self.W1 = []
         for i in range(main.ann.inputNodes):
             w1i = []
             for j in range(main.ann.hiddenNodes):
-                parent = parents[random.randint(0, len(parents))]
+                parent = parents[random.randint(0, limit)]
                 w1i.append(parent.W1[i][j])
+                # TODO Apply mutation
             self.W1.append(w1i)
 
         self.W2 = []
         for i in range(main.ann.hiddenNodes):
             w2i = []
             for j in range(main.ann.outputNodes):
-                parent = parents[random.randint(0, len(parents))]
+                parent = parents[random.randint(0, limit)]
                 w2i.append(parent.W2[i][j])
             self.W2.append(w2i)
 
