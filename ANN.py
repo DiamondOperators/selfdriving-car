@@ -7,7 +7,7 @@ class ANN:
         self.hiddenNodes = 64
         self.outputNodes = 1
 
-        self.x = tf.placeholder("float", shape=[self.inputNodes, None], name="sensor-input")
+        self.x = tf.placeholder("float", shape=[None, self.inputNodes], name="sensor-input")
         self.W1 = tf.placeholder("float", shape=[self.inputNodes, self.hiddenNodes])
         self.W2 = tf.placeholder("float", shape=[self.hiddenNodes, self.outputNodes])
         self.y = tf.tanh(tf.matmul(tf.tanh(tf.matmul(self.x, self.W1)), self.W2))
@@ -17,4 +17,4 @@ class ANN:
         self.session.run(init)
 
     def propagate_forward(self, car, sensor_data):
-        return self.session.run(self.y, feed_dict={self.x: sensor_data, self.W1: car.W1, self.W2: car.W2})[0][0]
+        return self.session.run(self.y, feed_dict={self.x: sensor_data, self.W1: car.W1, self.W2: car.W2})

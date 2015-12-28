@@ -1,4 +1,5 @@
 import math
+import main
 from graphics import *
 
 
@@ -59,8 +60,16 @@ class Road(object):
 
     def redraw(self):
         for line in self.lines:
-            line.draw(self.win)
-        self.finish.draw(self.win)
+            try:
+                line.draw(self.win)
+            except GraphicsError:
+                pass
+
+        try:
+            self.finish.draw(self.win)
+        except GraphicsError:
+            pass
+
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
 
@@ -108,10 +117,11 @@ class Road(object):
         #   c = sx*ty - tx*sy
 
         for line in self.lines:
-            s = line.p1, t = line.p2
+            s = line.p1
+            t = line.p2
 
             # Eerst kijken of de auto binnen het bereik van de lijn is:
-            if car.x < min(s.x, t.x) or car.x > max(s.x, t.x) or car.y < min(s.y, t.y) or car.y > max(s.y, t.y):
+            if in_range(line, car.x, car.y):
                 continue
 
             # Afstand uitrekenen
@@ -126,7 +136,69 @@ class Road(object):
         return False
 
     def get_sensor_data(self, car):
-        pass
+        result = []
+
+        # Hier is de maximale kijkhoek van de auto 120 graden oftewel 2/3*pi radialen
+        view_angle = 2 / 3 * math.pi
+        num_of_sensors = main.ann.inputNodes
+        angle_per_sensor = view_angle / num_of_sensors
+        first_sensor_angle = car.direction - view_angle / 2
+        max_sensor_range = car.sensor_range
+
+        for i in range(0, num_of_sensors):
+            # De dichtbijste muur tot nu toe
+            closest_line = max_sensor_range
+
+            for line in self.lines:
+                sensor_angle = first_sensor_angle + i * angle_per_sensor
+
+                # De richtingscoefficient van de sensorlijn
+                m1 = math.tan(sensor_angle)
+
+                # Het snijpunt van de sensorlijn met de y-as (als y = mx + b, dan b = y - mx
+                b1 = car.y - m1 * car.x
+
+                # De richtingscoefficient van de lijn
+                m2 = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x)
+
+                # Het snijpunt van de lijn met de y-as
+                b2 = line.p1.y - m2 * line.p1.x
+
+                if m1 - m2 == 0:
+                    # De lijnen lopen parallel
+                    continue
+
+                # De coordinaten van het snijpunt van de lijnen
+                x = (b2 - b1) / (m1 - m2)
+                y = m1 * x + b1
+
+                # De afstand snijpunt tot auto
+                d = math.sqrt((x - car.x) ** 2 + (y - car.y) ** 2)
+
+                if d > closest_line:
+                    # Geen kandidaat voor dichtsbijzijnde lijn
+                    continue
+
+                if not in_range(line, x, y):
+                    # Sensorlijn sneedt muurlijn wel, maar niet het muurlijn*segment* dat de echte muur vormt
+                    continue
+
+                if math.cos(sensor_angle) * (x - car.x) <= 0:
+                    # Het snijpunt van sensorlijn en muurlijn zit aan de verkeerde kant van de auto
+                    # (kruist niet met eigenlijke sensorlijnsegment)
+                    continue
+
+                # Als deze code wordt bereikt is er alles goed en is het de kortste afstand tot nu toe.
+                closest_line = d
+            result.append(closest_line)
+        return [result]
+
+
+def in_range(line, x, y):
+    return x < min(line.p1.x, line.p2.x) \
+           or x > max(line.p1.x, line.p2.x) \
+           or y < min(line.p1.y, line.p2.y) \
+           or y > max(line.p1.y, line.p2.y)
 
 
 def test():
