@@ -13,11 +13,13 @@ class Road(object):
         self.finish = None
         self.margin = 2
         self.distance_check = []
+        self.check_line = None
 
-    def set_road(self, points, finish):
+    def set_road(self, points, finish, check_line):
         self.road = points
         self.make_lines()
         self.finish = finish
+        self.check_line = check_line
 
     def make_lines(self):
         self.lines = []
@@ -78,6 +80,11 @@ class Road(object):
         except GraphicsError:
             pass
 
+        try:
+            self.check_line.draw(self.win)
+        except GraphicsError:
+            pass
+
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
             # TODO undraw
@@ -109,14 +116,20 @@ class Road(object):
 
                 if self.car_collided(car):
                     car.collide_distance = self.collide_distance(car)
+
+                if distance_to_line_without_range(self.check_line, car.x, car.y) < self.margin:
+                    car.checked = True
             self.redraw()
         print "All cars collided"
         return self.cars
 
     def collide_distance(self, car):
+        if not car.checked:
+            return 0
+
         distances = []
         for line in self.distance_check:
-            distances.append(distance_to_line(line, car.x, car.y))
+            distances.append(distance_to_line_without_range(line, car.x, car.y))
 
         index = distances.index(min(distances))
 
@@ -206,9 +219,7 @@ class Road(object):
 
 def in_range(line, x, y):
     return x < min(line.p1.x, line.p2.x) \
-           or x > max(line.p1.x, line.p2.x) \
-           or y < min(line.p1.y, line.p2.y) \
-           or y > max(line.p1.y, line.p2.y)
+           or x > max(line.p1.x, line.p2.x)
 
 
 def distance_to_line(line, x, y):
@@ -235,6 +246,15 @@ def distance_to_line(line, x, y):
         return 1000000000000000000
 
     # Afstand uitrekenen
+    a = s.y - t.y
+    b = t.x - s.x
+    c = s.x * t.y - t.x * s.y
+    return abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
+
+
+def distance_to_line_without_range(line, x, y):
+    s = line.p1
+    t = line.p2
     a = s.y - t.y
     b = t.x - s.x
     c = s.x * t.y - t.x * s.y
