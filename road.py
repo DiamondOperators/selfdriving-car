@@ -6,7 +6,7 @@ from graphics import *
 class Road(object):
     def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=600, height=400)
-        self.rw = 35  # Road width
+        self.rw = 50  # Road width
         self.road = []
         self.lines = []
         self.cars = []
