@@ -4,8 +4,8 @@ import main
 
 class Car(object):
     def __init__(self, parents=None, parents_limit=None, collide_distance=-1, direction=0, x=0, y=0):
-        self.x = x
-        self.y = y
+        self.x = float(x)
+        self.y = float(y)
         self.speed = 1  # px per second
         self.direction = direction  # 0 = rechts, radialen
         self.collide_distance = collide_distance
@@ -45,14 +45,14 @@ class Car(object):
         for i in range(main.ann.inputNodes):
             w1i = []
             for j in range(main.ann.hiddenNodes):
-                w1i.append(random.random() * .1 - .05)
+                w1i.append(random.random() * .05 - .025)
             self.W1.append(w1i)
 
         self.W2 = []
         for i in range(main.ann.hiddenNodes):
             w2i = []
             for j in range(main.ann.outputNodes):
-                w2i.append(random.random() * .1 - .05)
+                w2i.append(random.random() * .05 - .025)
             self.W2.append(w2i)
 
     def update_direction(self, sensor_data):

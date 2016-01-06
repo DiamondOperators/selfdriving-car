@@ -16,3 +16,6 @@ def func():
         selector.test_generation()
 
     input("Press return to exit")
+
+if __name__ == "__main__":
+    func()

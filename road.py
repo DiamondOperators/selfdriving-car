@@ -6,12 +6,13 @@ from graphics import *
 class Road(object):
     def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=600, height=400)
-        self.rw = 30  # Road width
+        self.rw = 35  # Road width
         self.road = []
         self.lines = []
         self.cars = []
         self.finish = None
         self.margin = 2
+        self.distance_check = []
 
     def set_road(self, points, finish):
         self.road = points
@@ -27,6 +28,10 @@ class Road(object):
                 self.lines.append(Line(self.road[i], self.road[0]))
             else:
                 self.lines.append(Line(self.road[i], self.road[i + 1]))
+
+        # Copy to distance_check
+        for i in self.lines:
+            self.distance_check.append(i)
 
         # Outer points
         outer_points = []
@@ -62,6 +67,8 @@ class Road(object):
         for line in self.lines:
             try:
                 line.draw(self.win)
+                if abs(line.p1.x - line.p2.x) < 20:
+                    print line.p1.x, line.p2.x
             except GraphicsError:
                 pass
 
@@ -72,6 +79,7 @@ class Road(object):
 
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
+            # TODO undraw
 
     def reset_win(self):
         self.win.close()
@@ -99,11 +107,25 @@ class Road(object):
                 car.add_position(x_diff, y_diff)
 
                 if self.car_collided(car):
-                    # TODO car.collide_distance bepalen
-                    car.collide_distance = 2  # Random
+                    car.collide_distance = 2  # self.collide_distance(car)
             self.redraw()
         print "All cars collided"
         return self.cars
+
+    def collide_distance(self, car):
+        distances = []
+        for line in self.distance_check:
+            distances.append(distance_to_line(line, car.x, car.y))
+
+        index = distances.index(min(distances))
+
+        total_distance = 0
+
+        for line in self.distance_check[:index]:
+            total_distance += length_of_line(line)
+
+        total_distance += length_of_line(Line(self.distance_check[index].p1, Point(car.x, car.y)))
+        return total_distance
 
     def reset_car_positions(self):
         for car in self.cars:
@@ -116,38 +138,10 @@ class Road(object):
         return False
 
     def car_collided(self, car):
-        # Afstand van punt tot lijn.
-        # Lijn:
-        #   ax + by + c = 0
-        # Punt:
-        #   (p, q)
-        # Formule voor afstand:
-        #   |ap + bq + c| / sqrt(a^2 + b^2)
-
-        # Vergelijking van lijn opstelling aan de hand van twee punten (s en t):
-        # (sy - ty)x + (tx - sx)y + (sxty - txsy) = 0
-        # Dus:
-        #   a = sy - ty
-        #   b = tx - sx
-        #   c = sx*ty - tx*sy
-
         for line in self.lines:
-            s = line.p1
-            t = line.p2
-
-            # Eerst kijken of de auto binnen het bereik van de lijn is:
-            if in_range(line, car.x, car.y):
-                continue
-
-            # Afstand uitrekenen
-            a = s.y - t.y
-            b = t.x - s.x
-            c = s.x * t.y - t.x * s.y
-            distance = abs(a * car.x + b * car.y + c) / math.sqrt(a ** 2 + b ** 2)
-
-            if distance < self.margin:
+            distance = distance_to_line(line, car.x, car.y)
+            if distance < self.margin and distance != -1:
                 return True
-
         return False
 
     def get_sensor_data(self, car):
@@ -214,6 +208,40 @@ def in_range(line, x, y):
            or x > max(line.p1.x, line.p2.x) \
            or y < min(line.p1.y, line.p2.y) \
            or y > max(line.p1.y, line.p2.y)
+
+
+def distance_to_line(line, x, y):
+    # Afstand van punt tot lijn.
+    # Lijn:
+    #   ax + by + c = 0
+    # Punt:
+    #   (p, q)
+    # Formule voor afstand:
+    #   |ap + bq + c| / sqrt(a^2 + b^2)
+
+    # Vergelijking van lijn opstelling aan de hand van twee punten (s en t):
+    # (sy - ty)x + (tx - sx)y + (sxty - txsy) = 0
+    # Dus:
+    #   a = sy - ty
+    #   b = tx - sx
+    #   c = sx*ty - tx*sy
+
+    s = line.p1
+    t = line.p2
+
+    # Eerst kijken of de auto binnen het bereik van de lijn is:
+    if in_range(line, x, y):
+        return -1
+
+    # Afstand uitrekenen
+    a = s.y - t.y
+    b = t.x - s.x
+    c = s.x * t.y - t.x * s.y
+    return abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
+
+
+def length_of_line(line):
+    return math.sqrt((line.p1.x - line.p2.x) ** 2 + (line.p1.y - line.p2.y) ** 2)
 
 
 def test():
