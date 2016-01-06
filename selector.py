@@ -27,12 +27,19 @@ class Selector:
                     self.cars[j] = self.cars[j + 1]
                     self.cars[j + 1] = temp
 
+        parents = []
+        for i in range(0, len(self.cars) / 2):
+            parents.append(self.cars[i])
+
         # The best 25 cars are now in the first 25 indices of the array.
         # Substitute the last 25 cars in the array with new ones.
         for i in xrange(len(self.cars) / 2, len(self.cars)):
-            self.cars[i] = Car(self.cars, len(self.cars) / 2)
+            self.cars[i] = Car(parents)
 
     def test_generation(self):
+        for car in self.cars:
+            car.collide_distance = -1
+
         self.cars = self.road.test(self.cars)
 
 
@@ -40,5 +47,5 @@ def make_road():
     new_road = Road()
     points = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
               Point(300, 340), Point(150, 320), Point(50, 250)]
-    new_road.set_road(points, Point(400, 55))
+    new_road.set_road(points, Point(100, 80))
     return new_road

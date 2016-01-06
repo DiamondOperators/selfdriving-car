@@ -3,7 +3,7 @@ import main
 
 
 class Car(object):
-    def __init__(self, parents=None, parents_limit=None, collide_distance=-1, direction=0, x=0, y=0):
+    def __init__(self, parents=None, collide_distance=-1, direction=0, x=0, y=0):
         self.x = float(x)
         self.y = float(y)
         self.speed = 1  # px per second
@@ -16,28 +16,29 @@ class Car(object):
         self.sensor_range = 50
 
         if parents is not None:
-            if parents_limit is None:
-                parents_limit = len(parents)
-            self.inherit_from(parents, parents_limit)
+            self.inherit_from(parents)
         else:
             self.random_weights()
 
-    def inherit_from(self, parents, limit):
+    def inherit_from(self, parents):
+        W11length = len(parents[0].W1)
+        W12length = len(parents[0].W1[0])
+        W21length = len(parents[0].W2)
+        W22length = len(parents[0].W2[0])
+
         self.W1 = []
-        for i in range(main.ann.inputNodes):
+        for i in range(W11length):
             w1i = []
-            for j in range(main.ann.hiddenNodes):
-                parent = parents[random.randint(0, limit)]
-                w1i.append(parent.W1[i][j])
+            for j in range(W12length):
+                w1i.append(random.choice(parents).W1[i][j])
                 # TODO Apply mutation
             self.W1.append(w1i)
 
         self.W2 = []
-        for i in range(main.ann.hiddenNodes):
+        for i in range(W21length):
             w2i = []
-            for j in range(main.ann.outputNodes):
-                parent = parents[random.randint(0, limit)]
-                w2i.append(parent.W2[i][j])
+            for j in range(W22length):
+                w2i.append(random.choice(parents).W2[i][j])
             self.W2.append(w2i)
 
     def random_weights(self):

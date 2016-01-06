@@ -21,6 +21,7 @@ class Road(object):
 
     def make_lines(self):
         self.lines = []
+        self.distance_check = []
 
         # Inner lines
         for i in range(0, len(self.road)):
@@ -107,7 +108,7 @@ class Road(object):
                 car.add_position(x_diff, y_diff)
 
                 if self.car_collided(car):
-                    car.collide_distance = 2  # self.collide_distance(car)
+                    car.collide_distance = self.collide_distance(car)
             self.redraw()
         print "All cars collided"
         return self.cars
@@ -231,7 +232,7 @@ def distance_to_line(line, x, y):
 
     # Eerst kijken of de auto binnen het bereik van de lijn is:
     if in_range(line, x, y):
-        return -1
+        return 1000000000000000000
 
     # Afstand uitrekenen
     a = s.y - t.y
