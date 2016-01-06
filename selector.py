@@ -8,7 +8,7 @@ class Selector:
     def __init__(self):
         self.road = make_road()
         self.cars = []
-        self.population_size = 10  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
+        self.population_size = 12  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
 
     def initial_generation(self):
         # Add {self.population_size} random cars
@@ -47,5 +47,5 @@ def make_road():
     new_road = Road()
     points = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
               Point(300, 340), Point(150, 320), Point(50, 250)]
-    new_road.set_road(points, Point(100, 80))
+    new_road.set_road(points, Point(300, 30))
     return new_road
