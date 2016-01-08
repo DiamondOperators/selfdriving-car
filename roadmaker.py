@@ -23,6 +23,8 @@ while 1 + 1 == 2:
 
     if not (not (buttonLeft <= mouse.x <= buttonRight) or not (mouse.y >= buttonTop)) and mouse.y <= buttonBottom:
         print "Button clicked"
+
+        Line(first_point, editing_now[0]).draw(win)
         # Button was clicked, switch editing_now to new point array
         if editing_now == inner_points:
             editing_now = outer_points
@@ -32,17 +34,14 @@ while 1 + 1 == 2:
             break
         continue
 
+    mouse.draw(win)
     if len(editing_now) == 0:
-        # Point(mouse.x, mouse.y).draw(win)
-        first_point = Point(mouse.x, mouse.y)
-        first_point.draw(win)
+        first_point = mouse
         print "First point drawn"
     else:
-        last_point = Point(mouse.x, mouse.y)
-        last_point.draw(win)
-        line = Line(last_point, first_point)
+        line = Line(mouse, first_point)
         line.draw(win)
-        first_point = last_point
+        first_point = mouse
         print "Line drawn"
     editing_now.append(mouse)
 
