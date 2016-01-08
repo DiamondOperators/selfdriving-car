@@ -18,64 +18,49 @@ outer_points = []
 distance_check = []
 editing_now = inner_points
 
+print "Start drawing the inner points. Click the button when you're done."
+
 while 1 + 1 == 2:
     mouse = win.getMouse()
 
     if not (not (buttonLeft <= mouse.x <= buttonRight) or not (mouse.y >= buttonTop)) and mouse.y <= buttonBottom:
-        print "Button clicked"
-
         Line(first_point, editing_now[0]).draw(win)
         # Button was clicked, switch editing_now to new point array
         if editing_now == inner_points:
             editing_now = outer_points
+            print "Now draw the outer points..."
         elif editing_now == outer_points:
             editing_now = distance_check
+            print "... and now the distance check."
         elif editing_now == distance_check:
+            "You are done!"
             break
         continue
 
     mouse.draw(win)
     if len(editing_now) == 0:
         first_point = mouse
-        print "First point drawn"
     else:
         line = Line(mouse, first_point)
         line.draw(win)
         first_point = mouse
-        print "Line drawn"
     editing_now.append(mouse)
 
 # Construct file
 string = ""
-for i in range(0, len(inner_points)):
-    pt = inner_points[i]
-    string += pt.x + "," + pt.y
+for array in [inner_points, outer_points, distance_check]:
+    for i in range(0, len(array)):
+        string += str(array[i].x) + "," + str(array[i].y)
 
-    if i == len(inner_points) - 1:
-        string += "\n"
-    else:
-        string += ",,"
-for i in range(0, len(outer_points)):
-    pt = outer_points[i]
-    string += pt.x + "," + pt.y
-
-    if i == len(outer_points) - 1:
-        string += "\n"
-    else:
-        string += ",,"
-for i in range(0, len(distance_check)):
-    pt = distance_check[i]
-    string += pt.x + "," + pt.y
-
-    if i == len(distance_check) - 1:
-        string += "\n"
-    else:
-        string += ",,"
-print string
+        if i == len(array) - 1:
+            string += "\n"
+        else:
+            string += ",,"
+print "String to be saved:", string
 
 # Save file
 file_name = raw_input("How do you want to call your road? ")
-road_file = open("roads/" + file_name, 'w')
+road_file = open("roads/" + file_name + ".road", 'w')
 road_file.write(string)
 road_file.close()
 print "File saved successfully"
