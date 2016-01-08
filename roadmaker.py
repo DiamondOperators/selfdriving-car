@@ -2,7 +2,7 @@ from graphics import *
 
 # Make window
 win = GraphWin(title="Road maker", width=600, height=400)
-win.setBackground(color_rgb(255, 0, 0))
+win.setBackground(color_rgb(255, 255, 255))
 
 # Make button
 buttonLeft = 540
@@ -18,57 +18,60 @@ outer_points = []
 distance_check = []
 editing_now = inner_points
 
-
 while 1 + 1 == 2:
-  mouse = win.getMouse()
+    mouse = win.getMouse()
 
-  if mouse.x >= buttonLeft and mouse.x <= buttonRight and mouse.y >= buttonTop and mouse.y <= buttonBottom:
-    print "Button clicked"
-    # Button was clicked, switch editing_now to new point array
-    if editing_now == inner_points:
-      editing_now = outer_points
-    elif editing_now == outer_points:
-      editing_now = distance_check
-    elif editing_now == distance_check:
-      break
-    continue
+    if not (not (buttonLeft <= mouse.x <= buttonRight) or not (mouse.y >= buttonTop)) and mouse.y <= buttonBottom:
+        print "Button clicked"
+        # Button was clicked, switch editing_now to new point array
+        if editing_now == inner_points:
+            editing_now = outer_points
+        elif editing_now == outer_points:
+            editing_now = distance_check
+        elif editing_now == distance_check:
+            break
+        continue
 
-  if len(editing_now) == 0:
-    Point(mouse.x, mouse.y).draw(win)
-    print "First point drawn"
-  else:
-    last_point = editing_now[len(editing_now) - 1]
-    Line(Point(last_point.x, last_point.y), Point(mouse.x, mouse.y))
-    print "Line drawn"
-  editing_now.append(mouse)
+    if len(editing_now) == 0:
+        # Point(mouse.x, mouse.y).draw(win)
+        first_point = Point(mouse.x, mouse.y)
+        first_point.draw(win)
+        print "First point drawn"
+    else:
+        last_point = Point(mouse.x, mouse.y)
+        last_point.draw(win)
+        line = Line(last_point, first_point)
+        line.draw(win)
+        first_point = last_point
+        print "Line drawn"
+    editing_now.append(mouse)
 
-
-# Contruct file
+# Construct file
 string = ""
 for i in range(0, len(inner_points)):
-  pt = inner_points[i]
-  string += pt.x + "," + pt.y
+    pt = inner_points[i]
+    string += pt.x + "," + pt.y
 
-  if i == len(inner_points) - 1:
-    string += "\n"
-  else:
-    string += ",,"
+    if i == len(inner_points) - 1:
+        string += "\n"
+    else:
+        string += ",,"
 for i in range(0, len(outer_points)):
-  pt = outer_points[i]
-  string += pt.x + "," + pt.y
+    pt = outer_points[i]
+    string += pt.x + "," + pt.y
 
-  if i == len(outer_points) - 1:
-    string += "\n"
-  else:
-    string += ",,"
+    if i == len(outer_points) - 1:
+        string += "\n"
+    else:
+        string += ",,"
 for i in range(0, len(distance_check)):
-  pt = distance_check[i]
-  string += pt.x + "," + pt.y
+    pt = distance_check[i]
+    string += pt.x + "," + pt.y
 
-  if i == len(distance_check) - 1:
-    string += "\n"
-  else:
-    string += ",,"
+    if i == len(distance_check) - 1:
+        string += "\n"
+    else:
+        string += ",,"
 print string
 
 # Save file
