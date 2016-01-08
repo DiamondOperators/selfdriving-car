@@ -1,4 +1,5 @@
 import random
+from random import randint
 import main
 import math
 
@@ -12,7 +13,7 @@ class Car(object):
         self.collide_distance = collide_distance
         self.W1 = []
         self.W2 = []
-        self.mutation_rate = .3
+        self.mutation_rate = .1
         self.checked = False
 
         # De range van de sensoren, in pixels; wordt gebruikt in road.get_sensor_data()
@@ -34,9 +35,11 @@ class Car(object):
             w1i = []
             for j in range(W12length):
                 value = random.choice(parents).W1[i][j]
-                perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
-                value += perc * value
-                w1i.append(value)
+                mutation_chance = randint(1, 100)
+                if mutation_chance <= 25:
+                	perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                	value += perc * value
+                	w1i.append(value)
             self.W1.append(w1i)
 
         self.W2 = []
@@ -44,9 +47,11 @@ class Car(object):
             w2i = []
             for j in range(W22length):
                 value = random.choice(parents).W2[i][j]
-                perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
-                value += perc * value
-                w2i.append(value)
+                mutation_chance = randint(1, 100)
+                if mutation_chance <= 25:
+                	perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                	value += perc * value
+                	w2i.append(value)
             self.W2.append(w2i)
 
     def random_weights(self):
