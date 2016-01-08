@@ -2,10 +2,12 @@ import math
 import main
 from graphics import *
 
+window_width = 600
+window_height = 400
 
 class Road(object):
     def __init__(self):
-        self.win = GraphWin(title="Self-driving car", width=600, height=400)
+        self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         self.rw = 50  # Road width
         self.road = []
         self.lines = []
@@ -91,7 +93,7 @@ class Road(object):
 
     def reset_win(self):
         self.win.close()
-        self.win = GraphWin(title="Self-driving car", width=600, height=400)
+        self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         # Also clear self.cars array, to start with a clean window
         self.cars = []
         self.redraw()
