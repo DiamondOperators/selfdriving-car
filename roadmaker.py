@@ -59,6 +59,12 @@ for array in [inner_points, outer_points, distance_check]:
 print "String to be saved:", string
 
 # Save file
+try:
+    os.mkdir("./roads/")
+except OSError:
+    # Folder was already created"
+    pass
+
 file_name = raw_input("How do you want to call your road? ")
 road_file = open("roads/" + file_name + ".road", 'w')
 road_file.write(string)
