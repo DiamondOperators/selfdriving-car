@@ -7,7 +7,8 @@ window_height = 400
 
 
 class Road(object):
-    def __init__(self, inner_points=None, outer_points=None, distance_check_points=None):
+    def __init__(self, inner_points=None, outer_points=None, distance_check_points=None,
+                 finish=None, back_check=None):
         self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         self.rw = 50  # Road width
         self.road = []
@@ -15,14 +16,18 @@ class Road(object):
         self.cars = []
         self.finish = None
         self.margin = 2
-        self.check_line = None
+        self.back_check = None
         self.distance_check = []
 
-        if len(inner_points) is not None and len(outer_points) is not None and len(distance_check_points) is not None:
+        if inner_points is not None and outer_points is not None \
+                and distance_check_points is not None and finish is not None \
+                and back_check is not None:
             self.inner_points = inner_points
             self.outer_points = outer_points
             self.distance_check_points = distance_check_points
             self.make_lines2()
+            self.finish = finish[0]
+            self.back_check = Line(back_check[0], back_check[1])
 
     def make_lines2(self):
         # Clear lists
@@ -47,7 +52,7 @@ class Road(object):
         self.road = points
         self.make_lines()
         self.finish = finish
-        self.check_line = check_line
+        self.back_check = check_line
 
     def make_lines(self):
         self.lines = []
@@ -109,7 +114,7 @@ class Road(object):
             pass
 
         try:
-            self.check_line.draw(self.win)
+            self.back_check.draw(self.win)
         except GraphicsError:
             pass
 
@@ -145,7 +150,7 @@ class Road(object):
                 if self.car_collided(car):
                     car.collide_distance = self.collide_distance(car)
 
-                if distance_to_line_without_range(self.check_line, car.x, car.y) < self.margin:
+                if distance_to_line_without_range(self.back_check, car.x, car.y) < self.margin:
                     car.checked = True
             self.redraw()
         print "All cars collided"

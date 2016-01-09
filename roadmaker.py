@@ -1,4 +1,4 @@
-from graphics import *
+import road
 from road import *
 
 
@@ -19,6 +19,8 @@ def make_road():
     inner_points = []
     outer_points = []
     distance_check = []
+    finish = []
+    back_check = []
     editing_now = inner_points
 
     print "Start drawing the inner points. Click the button when you're done."
@@ -26,11 +28,10 @@ def make_road():
     while 1 + 1 == 2:
         mouse = win.getMouse()
 
-        if not (
-            not (button_left <= mouse.x <= button_right) or not (mouse.y >= button_top)) and mouse.y <= button_bottom:
+        if button_left <= mouse.x <= button_right and button_top <= mouse.y <= button_right:
             # Button is clicked
 
-            if len(editing_now) < 3:
+            if len(editing_now) < 3 and editing_now is not finish and editing_now is not back_check:
                 print "Please draw something"
                 continue
 
@@ -38,14 +39,20 @@ def make_road():
             Line(first_point, editing_now[0]).draw(win)
 
             # Switch editing_now to new point array
-            if editing_now == inner_points:
+            if editing_now is inner_points:
                 editing_now = outer_points
-                print "Now draw the outer points..."
-            elif editing_now == outer_points:
+                print "Now draw the outer points."
+            elif editing_now is outer_points:
                 editing_now = distance_check
-                print "... and now the distance check."
-            elif editing_now == distance_check:
-                "You are done!"
+                print "And now the distance check."
+            elif editing_now is distance_check:
+                editing_now = finish
+                print "Now put a dot for the starting point and finish"
+            elif editing_now is finish:
+                editing_now = back_check
+                print "Now draw the back check"
+            elif editing_now is back_check:
+                print "You are done!"
                 break
             continue
 
@@ -60,7 +67,7 @@ def make_road():
 
     # Construct file
     string = ""
-    for array in [inner_points, outer_points, distance_check]:
+    for array in [inner_points, outer_points, distance_check, finish, back_check]:
         for i in range(0, len(array)):
             string += str(array[i].x) + "," + str(array[i].y)
 
@@ -68,7 +75,6 @@ def make_road():
                 string += "\n"
             else:
                 string += ",,"
-    print "String to be saved:", string
 
     # Save file
     try:
@@ -94,7 +100,9 @@ def parse_road(name):
     inner_points = []
     outer_points = []
     distance_check = []
-    all_arrays = [inner_points, outer_points, distance_check]
+    finish = []
+    back_check = []
+    all_arrays = [inner_points, outer_points, distance_check, finish, back_check]
 
     for i in range(0, len(arrays)):
         pts = arrays[i].split(",,")
@@ -102,4 +110,4 @@ def parse_road(name):
             xy = pt.split(",")
             all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
 
-    return Road(inner_points, outer_points, distance_check)
+    return Road(inner_points, outer_points, distance_check, finish, back_check)
