@@ -24,8 +24,15 @@ while 1 + 1 == 2:
     mouse = win.getMouse()
 
     if not (not (buttonLeft <= mouse.x <= buttonRight) or not (mouse.y >= buttonTop)) and mouse.y <= buttonBottom:
+        # Button is clicked
+
+        if len(editing_now) < 3:
+            print "Please draw something"
+            continue
+
         Line(first_point, editing_now[0]).draw(win)
-        # Button was clicked, switch editing_now to new point array
+
+        # Switch editing_now to new point array
         if editing_now == inner_points:
             editing_now = outer_points
             print "Now draw the outer points..."
