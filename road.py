@@ -7,7 +7,7 @@ window_height = 400
 
 
 class Road(object):
-    def __init__(self):
+    def __init__(self, inner_points=None, outer_points=None, distance_check_points=None):
         self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         self.rw = 50  # Road width
         self.road = []
@@ -15,8 +15,33 @@ class Road(object):
         self.cars = []
         self.finish = None
         self.margin = 2
-        self.distance_check = []
         self.check_line = None
+        self.distance_check = []
+
+        if len(inner_points) is not None and len(outer_points) is not None and len(distance_check_points) is not None:
+            self.inner_points = inner_points
+            self.outer_points = outer_points
+            self.distance_check_points = distance_check_points
+            self.make_lines2()
+
+    def make_lines2(self):
+        # Clear lists
+        self.lines = []
+        self.distance_check = []
+
+        # Road lines
+        for point_array in [self.inner_points, self.outer_points]:
+            for i in range(0, len(point_array)):
+                if i == len(point_array) - 1:
+                    self.lines.append(Line(point_array[i], point_array[0]))
+                else:
+                    self.lines.append(Line(point_array[i], point_array[i + 1]))
+        # Distance check lines
+        for i in range(0, len(self.distance_check_points)):
+            if i == len(self.distance_check_points) - 1:
+                self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[0]))
+            else:
+                self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[i + 1]))
 
     def set_road(self, points, finish, check_line):
         self.road = points

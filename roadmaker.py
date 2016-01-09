@@ -102,6 +102,4 @@ def parse_road(name):
             xy = pt.split(",")
             all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
 
-    road = Road()
-    # TODO road.setRoad(inner_points, outer_points, distance_check)
-    return road
+    return Road(inner_points, outer_points, distance_check)
