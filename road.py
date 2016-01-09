@@ -5,6 +5,7 @@ from graphics import *
 window_width = 600
 window_height = 400
 
+
 class Road(object):
     def __init__(self):
         self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
