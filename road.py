@@ -196,38 +196,38 @@ class Road(object):
         result = []
 
         # Hier is de maximale kijkhoek van de auto 120 graden oftewel 2/3*pi radialen
-        view_angle = 2 / 3 * math.pi
+        view_angle = 2. / 3 * math.pi
         num_of_sensors = main.ann.inputNodes
-        angle_per_sensor = view_angle / num_of_sensors
+        angle_per_sensor = view_angle / (num_of_sensors - 1)
         first_sensor_angle = car.direction - view_angle / 2
         max_sensor_range = car.sensor_range
 
         for i in range(0, num_of_sensors):
-            # De dichtbijste muur tot nu toe
+            sensor_angle = first_sensor_angle + i * angle_per_sensor
+
+            # De dichtbijste muur tot nu toe voor deze sensor
             closest_line = max_sensor_range
 
-            for line in self.lines:
-                sensor_angle = first_sensor_angle + i * angle_per_sensor
-
+            for wall in self.lines:
                 # De richtingscoefficient van de sensorlijn
                 m1 = math.tan(sensor_angle)
 
                 # Het snijpunt van de sensorlijn met de y-as (als y = mx + b, dan b = y - mx)
                 b1 = car.y - m1 * car.x
 
-                if line.p2.x == line.p1.x:
+                if wall.p2.x == wall.p1.x:
                     # De muurlijn is verticaal. We moeten de coordinaten van het snijpunt
                     # nu anders berekenen, anders moeten we delen door nul
                     # Neem de x van de verticale muurlijn:
-                    x = line.p1.x
+                    x = wall.p1.x
                     # En bereken de y door de x in te vullen in de sensorlijn formule:
                     y = m1 * x + b1
                 else:
                     # De richtingscoefficient van de muurlijn:
-                    m2 = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x)
+                    m2 = (wall.p2.y - wall.p1.y) / (wall.p2.x - wall.p1.x)
 
                     # Het snijpunt van de muurlijn met de y-as:
-                    b2 = line.p1.y - m2 * line.p1.x
+                    b2 = wall.p1.y - m2 * wall.p1.x
 
                     if m1 - m2 == 0:
                         # De lijnen lopen parallel dus er is geen snijpunt
@@ -244,7 +244,7 @@ class Road(object):
                     # Geen kandidaat voor dichtsbijzijnde lijn
                     continue
 
-                if not in_range(line, x, y):
+                if not in_range(wall, x, y):
                     # Sensorlijn sneedt muurlijn wel, maar niet het muurlijn*segment* dat de echte muur vormt
                     continue
 
