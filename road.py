@@ -211,22 +211,30 @@ class Road(object):
                 # De richtingscoefficient van de sensorlijn
                 m1 = math.tan(sensor_angle)
 
-                # Het snijpunt van de sensorlijn met de y-as (als y = mx + b, dan b = y - mx
+                # Het snijpunt van de sensorlijn met de y-as (als y = mx + b, dan b = y - mx)
                 b1 = car.y - m1 * car.x
 
-                # De richtingscoefficient van de lijn
-                m2 = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x)
+                if line.p2.x == line.p1.x:
+                    # De muurlijn is verticaal. We moeten de coordinaten van het snijpunt
+                    # nu anders berekenen, anders moeten we delen door nul
+                    # Neem de x van de verticale muurlijn:
+                    x = line.p1.x
+                    # En bereken de y door de x in te vullen in de sensorlijn formule:
+                    y = m1 * x + b1
+                else:
+                    # De richtingscoefficient van de muurlijn:
+                    m2 = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x)
 
-                # Het snijpunt van de lijn met de y-as
-                b2 = line.p1.y - m2 * line.p1.x
+                    # Het snijpunt van de muurlijn met de y-as:
+                    b2 = line.p1.y - m2 * line.p1.x
 
-                if m1 - m2 == 0:
-                    # De lijnen lopen parallel
-                    continue
+                    if m1 - m2 == 0:
+                        # De lijnen lopen parallel dus er is geen snijpunt
+                        continue
 
-                # De coordinaten van het snijpunt van de lijnen
-                x = (b2 - b1) / (m1 - m2)
-                y = m1 * x + b1
+                    # De coordinaten van het snijpunt van de lijnen
+                    x = (b2 - b1) / (m1 - m2)
+                    y = m1 * x + b1
 
                 # De afstand snijpunt tot auto
                 d = math.sqrt((x - car.x) ** 2 + (y - car.y) ** 2)
@@ -244,7 +252,7 @@ class Road(object):
                     # (kruist niet met eigenlijke sensorlijnsegment)
                     continue
 
-                # Als deze code wordt bereikt is er alles goed en is het de kortste afstand tot nu toe.
+                # Als deze code wordt bereikt is alles goed en is het de kortste afstand tot nu toe.
                 closest_line = d
             result.append(closest_line)
         return [result]
