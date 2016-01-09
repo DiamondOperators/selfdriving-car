@@ -150,7 +150,7 @@ class Road(object):
                 if self.car_collided(car):
                     car.collide_distance = self.collide_distance(car)
 
-                if distance_to_line_without_range(self.back_check, car.x, car.y) < self.margin:
+                if distance_to_line(self.back_check, car.x, car.y) < self.margin:
                     car.checked = True
             self.redraw()
         print "All cars collided"
@@ -163,6 +163,7 @@ class Road(object):
         distances = []
         for line in self.distance_check:
             distances.append(distance_to_line_without_range(line, car.x, car.y))
+            # TODO Actually range must be used
 
         index = distances.index(min(distances))
 
@@ -259,8 +260,11 @@ class Road(object):
 
 
 def in_range(line, x, y):
-    return x < min(line.p1.x, line.p2.x) \
-           or x > max(line.p1.x, line.p2.x)
+    minx = min(line.p1.x, line.p2.x)
+    maxx = max(line.p1.x, line.p2.x)
+    miny = min(line.p1.y, line.p1.y)
+    maxy = max(line.p1.y, line.p1.y)
+    return minx <= x <= maxx or miny <= y <= maxy
 
 
 def distance_to_line(line, x, y):
@@ -279,14 +283,14 @@ def distance_to_line(line, x, y):
     #   b = tx - sx
     #   c = sx*ty - tx*sy
 
+    # Eerst kijken of de auto binnen het bereik van de lijn is:
+    if in_range(line, x, y):
+        return -1
+
     s = line.p1
     t = line.p2
 
-    # Eerst kijken of de auto binnen het bereik van de lijn is:
-    if in_range(line, x, y):
-        return 1000000000000000000
-
-    # Afstand uitrekenen
+    # Afstand berekenen
     a = s.y - t.y
     b = t.x - s.x
     c = s.x * t.y - t.x * s.y
