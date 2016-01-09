@@ -89,6 +89,8 @@ def make_road():
     road_file.close()
     print "File saved successfully"
 
+    return file_name
+
 
 def parse_road(name):
     file1 = open("roads/" + name + ".road")
@@ -111,3 +113,10 @@ def parse_road(name):
             all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
 
     return Road(inner_points, outer_points, distance_check, finish, back_check)
+
+
+def fetch_road():
+    name = raw_input("What road? Type \"new\" to creat a new one.\n")
+    if name == "new":
+        name = make_road()
+    return parse_road(name)

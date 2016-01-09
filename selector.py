@@ -7,7 +7,7 @@ import roadmaker
 
 class Selector:
     def __init__(self):
-        self.road = roadmaker.parse_road(raw_input("What road? "))
+        self.road = roadmaker.fetch_road()
         self.cars = []
         self.population_size = 12  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
 
