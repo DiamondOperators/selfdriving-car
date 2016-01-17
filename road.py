@@ -103,8 +103,6 @@ class Road(object):
         for line in self.lines:
             try:
                 line.draw(self.win)
-                if abs(line.p1.x - line.p2.x) < 20:
-                    print line.p1.x, line.p2.x
             except GraphicsError:
                 pass
 
