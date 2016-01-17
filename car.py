@@ -31,11 +31,13 @@ class Car(object):
         W21length = len(parents[0].W2)
         W22length = len(parents[0].W2[0])
 
+        parent = random.choice(parents)
+
         self.W1 = []
         for i in range(W11length):
             w1i = []
             for j in range(W12length):
-                value = random.choice(parents).W1[i][j]
+                value = parent.W1[i][j]
                 mutation_chance = randint(1, 100)
                 if mutation_chance <= 25:
                     perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
@@ -47,7 +49,7 @@ class Car(object):
         for i in range(W21length):
             w2i = []
             for j in range(W22length):
-                value = random.choice(parents).W2[i][j]
+                value = parent.W2[i][j]
                 mutation_chance = randint(1, 100)
                 if mutation_chance <= 25:
                     perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
