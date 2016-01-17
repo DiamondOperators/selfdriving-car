@@ -10,6 +10,8 @@ class Selector:
         self.road = roadmaker.fetch_road()
         self.cars = []
         self.population_size = 20  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
+        self.max_fitness = 0
+        self.avg_fitness = 0
 
     def initial_generation(self):
         # Add {self.population_size} random cars
@@ -18,16 +20,6 @@ class Selector:
             self.cars.append(Car())
 
     def create_next_generation(self):
-        # Sort cars by collide_distance descending
-        # Uses bubblesort algorithm
-        for h in xrange(1, len(self.cars) - 1):
-            i = len(self.cars) - h  # i gaat dus van len(self.cars) naar (en inclusief) 2
-            for j in xrange(0, i):
-                if self.cars[j].collide_distance < self.cars[j + 1].collide_distance:
-                    temp = self.cars[j]
-                    self.cars[j] = self.cars[j + 1]
-                    self.cars[j + 1] = temp
-
         stay_alive = int(len(self.cars) * .5)
         parents = []
         for i in range(0, stay_alive):
@@ -46,6 +38,29 @@ class Selector:
             self.cars = self.road.test(self.cars)
         except KeyboardInterrupt:
             pass
+
+        # Sort the cars by collide_distance descending
+        # Uses bubblesort algorithm
+        for h in xrange(1, len(self.cars) - 1):
+            i = len(self.cars) - h  # i gaat dus van len(self.cars) naar (en inclusief) 2
+            for j in xrange(0, i):
+                if self.cars[j].collide_distance < self.cars[j + 1].collide_distance:
+                    temp = self.cars[j]
+                    self.cars[j] = self.cars[j + 1]
+                    self.cars[j + 1] = temp
+
+        # Create array with only the fitnesses of the cars
+        fitnesses = []
+        for car in self.cars:
+            fitnesses.append(car.collide_distance)
+
+        # Max fitness:
+        if fitnesses[0] > self.max_fitness:
+            self.max_fitness = self.cars[0].collide_distance
+            print "New max fitness:", self.max_fitness
+        # Average fitness:
+        self.avg_fitness = sum(fitnesses) / len(fitnesses)
+        print "Avg fitness:", self.avg_fitness, "\n"
 
 
 def make_road():

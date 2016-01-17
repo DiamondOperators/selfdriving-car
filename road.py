@@ -118,7 +118,6 @@ class Road(object):
 
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
-            # TODO undraw
 
     def reset_win(self):
         self.win.close()
@@ -151,7 +150,6 @@ class Road(object):
                 if self.point_collides_with_line(self.back_check, car.x, car.y):
                     car.checked = True
             self.redraw()
-        print "All cars collided"
         return self.cars
 
     def collide_distance(self, car):
