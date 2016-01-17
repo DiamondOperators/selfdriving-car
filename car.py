@@ -70,7 +70,7 @@ class Car(object):
             self.W2.append(w2i)
 
     def update_direction(self, sensor_data):
-        self.direction += main.ann.propagate_forward(self, sensor_data)[0][0] * math.pi / 2
+        self.direction += main.ann.propagate_forward(self, sensor_data)[0][0]
 
     def set_position(self, x, y):
         self.x = x

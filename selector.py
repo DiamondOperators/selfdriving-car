@@ -45,9 +45,7 @@ class Selector:
         try:
             self.cars = self.road.test(self.cars)
         except KeyboardInterrupt:
-            for car in self.cars:
-                if car.collide_distance == -1:
-                    car.collide_distance = 0
+            pass
 
 
 def make_road():
