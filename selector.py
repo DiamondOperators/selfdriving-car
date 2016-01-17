@@ -3,6 +3,7 @@
 from road import *
 from car import *
 import roadmaker
+import time
 
 
 class Selector:
@@ -49,6 +50,9 @@ class Selector:
                     self.cars[j] = self.cars[j + 1]
                     self.cars[j + 1] = temp
 
+        # Draw a circle around the best car
+        Circle(Point(self.cars[0].x, self.cars[0].y), 10).draw(self.road.win)
+
         # Create array with only the fitnesses of the cars
         fitnesses = []
         for car in self.cars:
@@ -61,6 +65,8 @@ class Selector:
         # Average fitness:
         self.avg_fitness = sum(fitnesses) / len(fitnesses)
         print "Avg fitness:", self.avg_fitness, "\n"
+
+        time.sleep(.3)
 
 
 def make_road():
