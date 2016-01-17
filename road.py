@@ -148,7 +148,7 @@ class Road(object):
                 if self.car_collided(car):
                     car.collide_distance = self.collide_distance(car)
 
-                if distance_to_line(self.back_check, car.x, car.y) < self.margin:
+                if self.point_collides_with_line(self.back_check, car.x, car.y):
                     car.checked = True
             self.redraw()
         print "All cars collided"
@@ -160,8 +160,7 @@ class Road(object):
 
         distances = []
         for line in self.distance_check:
-            distances.append(distance_to_line_without_range(line, car.x, car.y))
-            # TODO Actually range must be used
+            distances.append(distance_to_line_segment(line, car))
 
         index = distances.index(min(distances))
 
@@ -185,8 +184,7 @@ class Road(object):
 
     def car_collided(self, car):
         for line in self.lines:
-            distance = distance_to_line(line, car.x, car.y)
-            if distance < self.margin and distance != -1:
+            if self.point_collides_with_line(line, car.x, car.y):
                 return True
         return False
 
@@ -242,7 +240,7 @@ class Road(object):
                     # Geen kandidaat voor dichtsbijzijnde lijn
                     continue
 
-                if not in_range(wall, x, y):
+                if out_of_range(wall, x, y):
                     # Sensorlijn sneedt muurlijn wel, maar niet het muurlijn*segment* dat de echte muur vormt
                     continue
 
@@ -256,52 +254,58 @@ class Road(object):
             result.append(closest_line)
         return [result]
 
+    def point_collides_with_line(self, line, x, y):
+        # Eerst kijken of de auto binnen het bereik van de lijn is:
+        if out_of_range(line, x, y):
+            return False
 
-def in_range(line, x, y):
+        # Afstand van punt tot lijn.
+        # Lijn:
+        #   ax + by + c = 0
+        # Punt:
+        #   (p, q)
+        # Formule voor afstand:
+        #   |ap + bq + c| / sqrt(a^2 + b^2)
+
+        # Vergelijking van lijn opstelling aan de hand van twee punten (s en t):
+        # (sy - ty)x + (tx - sx)y + (sxty - txsy) = 0
+        # Dus:
+        #   a = sy - ty
+        #   b = tx - sx
+        #   c = sx*ty - tx*sy
+
+        s = line.p1
+        t = line.p2
+
+        # Afstand berekenen
+        a = s.y - t.y
+        b = t.x - s.x
+        c = s.x * t.y - t.x * s.y
+        distance = abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
+        return distance < self.margin
+
+
+def out_of_range(line, x, y):
     minx = min(line.p1.x, line.p2.x)
     maxx = max(line.p1.x, line.p2.x)
     miny = min(line.p1.y, line.p1.y)
     maxy = max(line.p1.y, line.p1.y)
-    return minx <= x <= maxx or miny <= y <= maxy
+    return (x < minx or x > maxx) and (y < miny or y > maxy)
 
 
-def distance_to_line(line, x, y):
-    # Afstand van punt tot lijn.
-    # Lijn:
-    #   ax + by + c = 0
-    # Punt:
-    #   (p, q)
-    # Formule voor afstand:
-    #   |ap + bq + c| / sqrt(a^2 + b^2)
+def distance_to_line_segment(line, car):
+    if out_of_range(line, car.x, car.y):
+        # Find the closest of the two end points of the line
+        d1 = math.sqrt((car.x - line.p1.x) ** 2 + (car.y - line.p1.y) ** 2)
+        d2 = math.sqrt((car.x - line.p2.x) ** 2 + (car.y - line.p2.y) ** 2)
+        return min(d1, d2)
 
-    # Vergelijking van lijn opstelling aan de hand van twee punten (s en t):
-    # (sy - ty)x + (tx - sx)y + (sxty - txsy) = 0
-    # Dus:
-    #   a = sy - ty
-    #   b = tx - sx
-    #   c = sx*ty - tx*sy
-
-    # Eerst kijken of de auto binnen het bereik van de lijn is:
-    if in_range(line, x, y):
-        return -1
-
-    s = line.p1
-    t = line.p2
-
-    # Afstand berekenen
-    a = s.y - t.y
-    b = t.x - s.x
-    c = s.x * t.y - t.x * s.y
-    return abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
-
-
-def distance_to_line_without_range(line, x, y):
     s = line.p1
     t = line.p2
     a = s.y - t.y
     b = t.x - s.x
     c = s.x * t.y - t.x * s.y
-    return abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
+    return abs(a * car.x + b * car.y + c) / math.sqrt(a ** 2 + b ** 2)
 
 
 def length_of_line(line):
