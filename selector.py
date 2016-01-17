@@ -42,7 +42,12 @@ class Selector:
         for car in self.cars:
             car.collide_distance = -1
 
-        self.cars = self.road.test(self.cars)
+        try:
+            self.cars = self.road.test(self.cars)
+        except KeyboardInterrupt:
+            for car in self.cars:
+                if car.collide_distance == -1:
+                    car.collide_distance = 0
 
 
 def make_road():
