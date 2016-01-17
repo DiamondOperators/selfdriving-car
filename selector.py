@@ -58,10 +58,12 @@ class Selector:
         # Max fitness:
         if fitnesses[0] > self.max_fitness:
             self.max_fitness = self.cars[0].collide_distance
-            print "New max fitness:", self.max_fitness
+        print "Max fitness:", self.max_fitness
         # Average fitness:
         self.avg_fitness = sum(fitnesses) / len(fitnesses)
         print "Avg fitness:", self.avg_fitness, "\n"
+        # Best car:
+        print "Best car id:", self.cars[0].id
 
         time.sleep(.3)
 

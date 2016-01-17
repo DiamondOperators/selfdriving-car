@@ -6,6 +6,7 @@ import math
 
 class Car(object):
     def __init__(self, parents=None, collide_distance=-1, direction=0, x=0, y=0):
+        self.id = randint(0, 1000)
         self.x = float(x)
         self.y = float(y)
         self.speed = 1  # px per second
