@@ -39,7 +39,7 @@ class Car(object):
                 if mutation_chance <= 25:
                     perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
                     value += perc * value
-                    w1i.append(value)
+                w1i.append(value)
             self.W1.append(w1i)
 
         self.W2 = []
@@ -51,7 +51,7 @@ class Car(object):
                 if mutation_chance <= 25:
                     perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
                     value += perc * value
-                    w2i.append(value)
+                w2i.append(value)
             self.W2.append(w2i)
 
     def random_weights(self):
