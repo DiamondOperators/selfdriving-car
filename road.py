@@ -100,7 +100,7 @@ class Road(object):
                 self.lines.append(Line(outer_points[i], outer_points[i + 1]))
 
     def redraw(self):
-        for line in self.lines:
+        for line in self.lines + self.distance_check:
             try:
                 line.draw(self.win)
             except GraphicsError:
@@ -169,7 +169,8 @@ class Road(object):
         for line in self.distance_check[:index]:
             total_distance += length_of_line(line)
 
-        total_distance += length_of_line(Line(self.distance_check[index].p1, Point(car.x, car.y)))
+        current_segment = self.distance_check[index]
+        total_distance += math.sqrt((car.x - current_segment.p1.x) ** 2 + (car.y - current_segment.p1.y) ** 2)
         return total_distance
 
     def reset_car_positions(self):
@@ -288,8 +289,8 @@ class Road(object):
 def out_of_range(line, x, y):
     minx = min(line.p1.x, line.p2.x)
     maxx = max(line.p1.x, line.p2.x)
-    miny = min(line.p1.y, line.p1.y)
-    maxy = max(line.p1.y, line.p1.y)
+    miny = min(line.p1.y, line.p2.y)
+    maxy = max(line.p1.y, line.p2.y)
     return (x < minx or x > maxx) and (y < miny or y > maxy)
 
 
@@ -312,12 +313,29 @@ def length_of_line(line):
     return math.sqrt((line.p1.x - line.p2.x) ** 2 + (line.p1.y - line.p2.y) ** 2)
 
 
-def test():
-    # Test
-    road = Road()
-    pts = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
-           Point(300, 340), Point(150, 320), Point(50, 250)]  # pts = [Point(100, 100), Point(160, 60)]
-    road.set_road(pts, Point(300, 35))
-    road.redraw()
-
-    input("Press any key to exit")
+# import roadmaker
+# from car import *
+# from ANN import *
+#
+#
+# def test():
+#     # Test
+#     main.ann = ANN()
+#     road = roadmaker.fetch_road()
+#     distance_check_pts = [Point(100, 100), Point(200, 100), Point(200, 200), Point(100, 200)]
+#     distance_check_lines = []
+#     for i in range(0, len(distance_check_pts)):
+#         if i == len(distance_check_pts) - 1:
+#             distance_check_lines.append(Line(distance_check_pts[i], distance_check_pts[0]))
+#         else:
+#             distance_check_lines.append(Line(distance_check_pts[i], distance_check_pts[i + 1]))
+#     road.distance_check = distance_check_lines
+#     road.redraw()
+#     for i in road.distance_check:
+#         i.draw(road.win)
+#     car = Car()
+#     while True:
+#         mouse = road.win.getMouse()
+#         car.x = mouse.x
+#         car.y = mouse.y
+#         road.collide_distance(car)
