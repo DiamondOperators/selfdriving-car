@@ -13,7 +13,7 @@ class Car(object):
         self.collide_distance = collide_distance
         self.W1 = []
         self.W2 = []
-        self.mutation_rate = .1
+        self.mutation_rate = .07
         self.checked = False
 
         # De range van de sensoren, in pixels; wordt gebruikt in road.get_sensor_data()

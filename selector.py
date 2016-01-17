@@ -9,7 +9,7 @@ class Selector:
     def __init__(self):
         self.road = roadmaker.fetch_road()
         self.cars = []
-        self.population_size = 12  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
+        self.population_size = 20  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
 
     def initial_generation(self):
         # Add {self.population_size} random cars
@@ -28,13 +28,13 @@ class Selector:
                     self.cars[j] = self.cars[j + 1]
                     self.cars[j + 1] = temp
 
-        stay_alive = int(len(self.cars) * .2)
+        stay_alive = int(len(self.cars) * .5)
         parents = []
         for i in range(0, stay_alive):
             parents.append(self.cars[i])
 
-        # The best 25 cars are now in the first 25 indices of the array.
-        # Substitute the last 25 cars in the array with new ones.
+        # The best 10 cars are now in the first 10 indices of the array.
+        # Substitute the last 10 cars in the array with new ones.
         for i in xrange(stay_alive, len(self.cars)):
             self.cars[i] = Car(parents)
 
