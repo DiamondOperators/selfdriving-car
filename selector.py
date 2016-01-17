@@ -10,7 +10,7 @@ class Selector:
     def __init__(self):
         self.road = roadmaker.fetch_road()
         self.cars = []
-        self.population_size = 20  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
+        self.population_size = 12  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
         self.max_fitness = 0
         self.avg_fitness = 0
 
@@ -32,11 +32,8 @@ class Selector:
             self.cars[i] = Car(parents)
 
     def test_generation(self):
-        for car in self.cars:
-            car.collide_distance = -1
-
         try:
-            self.cars = self.road.test(self.cars)
+            self.road.test(self.cars)
         except KeyboardInterrupt:
             pass
 

@@ -130,12 +130,12 @@ class Road(object):
         self.cars = cars
 
         # Set all cars' positions to the finishing/starting line
-        self.reset_car_positions()
+        self.reset_cars()
 
         step_time = 1
 
         while self.not_all_cars_collided():
-            for car in self.cars:
+            for car in cars:
                 if car.collide_distance != -1:
                     continue
                 car.update_direction(self.get_sensor_data(car))
@@ -150,7 +150,6 @@ class Road(object):
                 if self.point_collides_with_line(self.back_check, car.x, car.y):
                     car.checked = True
             self.redraw()
-        return self.cars
 
     def collide_distance(self, car):
         if not car.checked:
@@ -171,9 +170,11 @@ class Road(object):
         total_distance += math.sqrt((car.x - current_segment.p1.x) ** 2 + (car.y - current_segment.p1.y) ** 2)
         return total_distance
 
-    def reset_car_positions(self):
+    def reset_cars(self):
         for car in self.cars:
             car.set_position(self.finish.x, self.finish.y)
+            car.collide_distance = -1
+            car.checked = False
 
     def not_all_cars_collided(self):
         for car in self.cars:
@@ -309,7 +310,6 @@ def distance_to_line_segment(line, car):
 
 def length_of_line(line):
     return math.sqrt((line.p1.x - line.p2.x) ** 2 + (line.p1.y - line.p2.y) ** 2)
-
 
 # import roadmaker
 # from car import *
