@@ -10,7 +10,7 @@ class Selector:
     def __init__(self):
         self.road = roadmaker.fetch_road()
         self.cars = []
-        self.population_size = 12  # Uit hoeveel auto's een populatie bestaat; moet een even getal zijn
+        self.population_size = 24  # Has to be an even number
         self.max_fitness = 0
         self.avg_fitness = 0
 

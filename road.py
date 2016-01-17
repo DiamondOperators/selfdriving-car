@@ -129,7 +129,6 @@ class Road(object):
     def test(self, cars):
         self.cars = cars
 
-        # Set all cars' positions to the finishing/starting line
         self.reset_cars()
 
         step_time = 1
@@ -172,9 +171,9 @@ class Road(object):
 
     def reset_cars(self):
         for car in self.cars:
-            car.set_position(self.finish.x, self.finish.y)
-            car.collide_distance = -1
-            car.checked = False
+            if car.collide_distance == -1:
+                car.checked = False
+                car.set_position(self.finish.x, self.finish.y)
 
     def not_all_cars_collided(self):
         for car in self.cars:
