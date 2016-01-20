@@ -1,7 +1,6 @@
 import random
 from random import randint
 import main
-import math
 
 
 class Car(object):
