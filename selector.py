@@ -8,7 +8,7 @@ import time
 
 class Selector:
     def __init__(self):
-        self.road = roadmaker.fetch_road()
+        self.road = main.road
         self.cars = []
         self.population_size = 14  # Has to be an even number
         self.max_fitness = 0
