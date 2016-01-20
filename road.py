@@ -293,18 +293,49 @@ def out_of_range(line, x, y):
 
 
 def distance_to_line_segment(line, car):
-    if out_of_range(line, car.x, car.y):  # TODO Deze out_of_range werkt hier niet voor
-        # Find the closest of the two end points of the line
-        d1 = math.sqrt((car.x - line.p1.x) ** 2 + (car.y - line.p1.y) ** 2)
-        d2 = math.sqrt((car.x - line.p2.x) ** 2 + (car.y - line.p2.y) ** 2)
-        return min(d1, d2)
-
     s = line.p1
     t = line.p2
-    a = s.y - t.y
-    b = t.x - s.x
-    c = s.x * t.y - t.x * s.y
-    return abs(a * car.x + b * car.y + c) / math.sqrt(a ** 2 + b ** 2)
+
+    if t.x - s.x == 0:
+        # De lijn is verticaal
+        if min(s.y, t.y) <= car.y <= max(s.y, t.y):
+            return abs(car.x - t.x)
+        else:
+            return closest_end_point(line, car.x, car.y)
+    if t.y - s.y == 0:
+        # De lijn is horizontaal
+        if min(s.x, t.x) <= car.x <= max(s.x, t.x):
+            return abs(car.y - t.y)
+        else:
+            return closest_end_point(line, car.x, car.y)
+
+    # Richtingscoefficient van de lijn:
+    m1 = (t.y - s.y) * 1. / (t.x - s.x)
+    b1 = s.y - m1 * s.x
+
+    # Richtingscoefficient van de lijn uit het punt (car.x, car.y) die loodrecht op het lijnsegment staat:
+    m2 = -1. / m1
+    b2 = car.y - m2 * car.x
+
+    # Snijpunt van de lijnen:
+    x = (b2 - b1) / (m1 - m2)
+    y = m1 * x + b1
+
+    if out_of_range(line, x, y):
+        return closest_end_point(line, car.x, car.y)
+    else:
+        # Wiskunde D formule
+        a = s.y - t.y
+        b = t.x - s.x
+        c = s.x * t.y - t.x * s.y
+        return abs(a * car.x + b * car.y + c) / math.sqrt(a ** 2 + b ** 2)
+
+
+def closest_end_point(line, x, y):
+    # Find the closest of the two end points of the line
+    d1 = math.sqrt((x - line.p1.x) ** 2 + (y - line.p1.y) ** 2)
+    d2 = math.sqrt((x - line.p2.x) ** 2 + (y - line.p2.y) ** 2)
+    return min(d1, d2)
 
 
 def length_of_line(line):

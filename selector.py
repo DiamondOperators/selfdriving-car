@@ -21,7 +21,7 @@ class Selector:
             self.cars.append(Car())
 
     def create_next_generation(self):
-        stay_alive = int(len(self.cars) * .2)
+        stay_alive = int(len(self.cars) * .5)
         parents = []
         for i in range(0, stay_alive):
             parents.append(self.cars[i])
