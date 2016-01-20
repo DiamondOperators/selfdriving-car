@@ -18,7 +18,7 @@ class Car(object):
         self.checked = False
 
         # De range van de sensoren, in pixels; wordt gebruikt in road.get_sensor_data()
-        self.sensor_range = 50
+        self.sensor_range = 200
 
         if parents is not None:
             self.inherit_from(parents)

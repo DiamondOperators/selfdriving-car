@@ -171,9 +171,10 @@ class Road(object):
 
     def reset_cars(self):
         for car in self.cars:
-            if car.collide_distance == -1:
-                car.checked = False
-                car.set_position(self.finish.x, self.finish.y)
+            #if car.collide_distance == -1:
+            car.checked = False
+            car.set_position(self.finish.x, self.finish.y)
+            car.collide_distance = -1
 
     def not_all_cars_collided(self):
         for car in self.cars:

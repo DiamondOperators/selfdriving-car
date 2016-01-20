@@ -10,7 +10,7 @@ class Selector:
     def __init__(self):
         self.road = roadmaker.fetch_road()
         self.cars = []
-        self.population_size = 24  # Has to be an even number
+        self.population_size = 14  # Has to be an even number
         self.max_fitness = 0
         self.avg_fitness = 0
 
@@ -61,9 +61,9 @@ class Selector:
         print "Max fitness:", self.max_fitness
         # Average fitness:
         self.avg_fitness = sum(fitnesses) / len(fitnesses)
-        print "Avg fitness:", self.avg_fitness, "\n"
+        print "Avg fitness:", self.avg_fitness
         # Best car:
-        print "Best car id:", self.cars[0].id
+        print "Best car id:", self.cars[0].id, "\n"
 
         time.sleep(.3)
 

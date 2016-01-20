@@ -83,7 +83,7 @@ def make_road():
         # Folder was already created"
         pass
 
-    file_name = raw_input("How do you want to call your road? ")
+    file_name = raw_input("What do you want to call your road? ")
     road_file = open("roads/" + file_name + ".road", 'w')
     road_file.write(string)
     road_file.close()
@@ -116,7 +116,7 @@ def parse_road(name):
 
 
 def fetch_road():
-    name = raw_input("What road? Type \"new\" to creat a new one.\n")
+    name = raw_input("What road? Type \"new\" to create a new one.\n")
     if name == "new":
         name = make_road()
     return parse_road(name)
