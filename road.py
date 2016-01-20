@@ -240,7 +240,7 @@ class Road(object):
                     continue
 
                 if out_of_range(wall, x, y):
-                    # Sensorlijn sneedt muurlijn wel, maar niet het muurlijn*segment* dat de echte muur vormt
+                    # Sensorlijn snijdt muurlijn wel, maar niet het muurlijn*segment* dat de echte muur vormt
                     continue
 
                 if math.cos(sensor_angle) * (x - car.x) <= 0:
@@ -293,7 +293,7 @@ def out_of_range(line, x, y):
 
 
 def distance_to_line_segment(line, car):
-    if out_of_range(line, car.x, car.y):
+    if out_of_range(line, car.x, car.y):  # TODO Deze out_of_range werkt hier niet voor
         # Find the closest of the two end points of the line
         d1 = math.sqrt((car.x - line.p1.x) ** 2 + (car.y - line.p1.y) ** 2)
         d2 = math.sqrt((car.x - line.p2.x) ** 2 + (car.y - line.p2.y) ** 2)
