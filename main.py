@@ -1,14 +1,11 @@
-from ANN import ANN
-from selector import Selector
-from backpropagator import Backpropagator
-import roadmaker
+from ANN import *
+from selector import *
+# from backpropagator import *
 
 ann = ANN()
-road = None
 
 
 def func():
-    road = roadmaker.fetch_road()
     option = input("1) Neuroevolution\n2) Backpropagation\n")
     if option == 1:
         selector = Selector()
