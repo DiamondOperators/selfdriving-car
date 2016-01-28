@@ -175,6 +175,7 @@ class Road(object):
             car.checked = False
             car.set_position(self.finish.x, self.finish.y)
             car.collide_distance = -1
+            car.direction = 0
 
     def not_all_cars_collided(self):
         for car in self.cars:
