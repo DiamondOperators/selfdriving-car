@@ -110,9 +110,9 @@ def parse_road(name):
         pts = arrays[i].split(",,")
         for pt in pts:
             xy = pt.split(",")
-            all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
+            all_arrays[i].append(graphics.Point(int(xy[0]), int(xy[1])))
 
-    return Road(inner_points, outer_points, distance_check, finish, back_check)
+    return road.Road(inner_points, outer_points, distance_check, finish, back_check)
 
 
 def fetch_road():

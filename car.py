@@ -13,6 +13,7 @@ class Car(object):
         self.collide_distance = collide_distance
         self.W1 = []
         self.W2 = []
+        self.W3 = []  # weight3
         self.mutation_rate = .1
         self.checked = False
 
@@ -29,6 +30,8 @@ class Car(object):
         W12length = len(parents[0].W1[0])
         W21length = len(parents[0].W2)
         W22length = len(parents[0].W2[0])
+        W31length = len(parents[0].W3)  # weight3
+        W32length = len(parents[0].W3[0])  # weight3
 
         parent = random.choice(parents)
 
@@ -56,6 +59,18 @@ class Car(object):
                 w2i.append(value)
             self.W2.append(w2i)
 
+        self.W3 = []  # weight3
+        for i in range(W31length):
+            w3i = []
+            for j in range(W32length):
+                value = parent.W3[i][j]
+                mutation_chance = randint(1, 100)
+                if mutation_chance <= 25:
+                    perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                    value += perc * value
+                w3i.append(value)
+            self.W3.append(w3i)
+
     def random_weights(self):
         self.W1 = []
         for i in range(main.ann.inputNodes):
@@ -67,9 +82,16 @@ class Car(object):
         self.W2 = []
         for i in range(main.ann.hiddenNodes):
             w2i = []
-            for j in range(main.ann.outputNodes):
+            for j in range(main.ann.hiddenNodes2):
                 w2i.append(random.random() * .05 - .025)
             self.W2.append(w2i)
+
+        self.W3 = []  # weight3
+        for i in range(main.ann.hiddenNodes2):
+            w3i = []
+            for j in range(main.ann.outputNodes):
+                w3i.append(random.random() * .05 - .025)
+            self.W3.append(w3i)
 
     def update_direction(self, sensor_data):
         self.direction += main.ann.propagate_forward(self, sensor_data)[0][0]
