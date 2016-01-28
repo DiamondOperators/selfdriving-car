@@ -5,7 +5,7 @@ class ANN:
     def __init__(self):
         self.inputNodes = 7
         self.hiddenNodes = 64
-        self.hiddenNodes2 = 32  # weight3
+        self.hiddenNodes2 = 64  # weight3
         self.outputNodes = 1
 
         self.x = tf.placeholder("float", shape=[None, self.inputNodes], name="sensor-input")
