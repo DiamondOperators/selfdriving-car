@@ -90,6 +90,10 @@ class Road(object):
                 if self.car_collided(car):
                     car.collide_distance = self.collide_distance(car)
 
+                if self.point_collides_with_line(self.finish, car.x, car.y) and car.checked:
+                    print "Car finished!"
+                    car.collide_distance = self.collide_distance(car)
+
                 if self.point_collides_with_line(self.back_check, car.x, car.y):
                     car.checked = True
             self.redraw()
