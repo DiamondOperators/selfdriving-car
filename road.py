@@ -36,17 +36,11 @@ class Road(object):
 
         # Road lines
         for point_array in [self.inner_points, self.outer_points]:
-            for i in range(0, len(point_array)):
-                if i == len(point_array) - 1:
-                    self.lines.append(Line(point_array[i], point_array[0]))
-                else:
-                    self.lines.append(Line(point_array[i], point_array[i + 1]))
+            for i in range(0, len(point_array) - 1):
+                self.lines.append(Line(point_array[i], point_array[i + 1]))
         # Distance check lines
-        for i in range(0, len(self.distance_check_points)):
-            if i == len(self.distance_check_points) - 1:
-                self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[0]))
-            else:
-                self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[i + 1]))
+        for i in range(0, len(self.distance_check_points) - 1):
+            self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[i + 1]))
 
     def redraw(self):
         for line in self.lines + self.distance_check:

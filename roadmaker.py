@@ -7,13 +7,25 @@ def make_road():
     win = GraphWin(title="Road maker", width=road.window_width, height=road.window_height)
     win.setBackground(color_rgb(255, 255, 255))
 
-    # Make button
-    button_left = 540
-    button_top = 385
-    button_right = 595
-    button_bottom = 395
+    button_width = 50
+    button_height = 10
+    button_margin = 5
+
+    # 'Done' button
+    button_left = road.window_width - button_margin - button_width
+    button_top = road.window_height - button_margin - button_height
+    button_right = road.window_width - button_margin
+    button_bottom = road.window_height - button_margin
     button = Rectangle(Point(button_left, button_top), Point(button_right, button_bottom))
     button.draw(win)
+
+    # Button to finish the lapse using a circle
+    button_left2 = road.window_width - 2 * button_margin - 2 * button_width
+    button_top2 = road.window_height - button_margin - button_height
+    button_right2 = road.window_width - 2 * button_margin - button_width
+    button_bottom2 = road.window_height - button_margin
+    button2 = Rectangle(Point(button_left2, button_top2), Point(button_right2, button_bottom2))
+    button2.draw(win)
 
     # Make point arrays
     inner_points = []
@@ -28,15 +40,18 @@ def make_road():
     while 1 + 1 == 2:
         mouse = win.getMouse()
 
-        if button_left <= mouse.x <= button_right and button_top <= mouse.y <= button_right:
+        if button_left2 <= mouse.x <= button_right2 and button_top2 <= mouse.y <= button_right2:
+            if len(editing_now) < 3 or editing_now is finish or editing_now is back_check:
+                print "You cannot perform that operation"
+                continue
+            mouse = Point(editing_now[0].x, editing_now[0].y)
+
+        elif button_left <= mouse.x <= button_right and button_top <= mouse.y <= button_right:
             # Button is clicked
 
             if len(editing_now) < 3 and editing_now is not finish and editing_now is not back_check:
                 print "Please draw something"
                 continue
-
-            # noinspection PyUnboundLocalVariable
-            Line(first_point, editing_now[0]).draw(win)
 
             # Switch editing_now to new point array
             if editing_now is inner_points:
