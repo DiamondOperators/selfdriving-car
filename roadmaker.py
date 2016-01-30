@@ -41,14 +41,14 @@ def make_road():
         mouse = win.getMouse()
 
         if button_left2 <= mouse.x <= button_right2 and button_top2 <= mouse.y <= button_right2:
+            # Left button was clicked
             if len(editing_now) < 3 or editing_now is finish or editing_now is back_check:
                 print "You cannot perform that operation"
                 continue
             mouse = Point(editing_now[0].x, editing_now[0].y)
 
         elif button_left <= mouse.x <= button_right and button_top <= mouse.y <= button_right:
-            # Button is clicked
-
+            # Right button was clicked
             if len(editing_now) < 3 and editing_now is not finish and editing_now is not back_check:
                 print "Please draw something"
                 continue
@@ -67,7 +67,6 @@ def make_road():
                 editing_now = back_check
                 print "Now draw the back check"
             elif editing_now is back_check:
-                print "You are done!"
                 break
             continue
 
@@ -80,6 +79,11 @@ def make_road():
             first_point = mouse
         editing_now.append(mouse)
 
+    print "Starting direction"
+    mouse = win.getMouse()
+    starting_direction = math.atan2(float(mouse.y) - float(finish[0].y), float(mouse.x) - float(finish[0].x))
+    print "Calculated direction:", starting_direction, "radians"
+
     # Construct file
     string = ""
     for array in [inner_points, outer_points, distance_check, finish, back_check]:
@@ -90,6 +94,7 @@ def make_road():
                 string += "\n"
             else:
                 string += ",,"
+    string += str(starting_direction) + "\n"
 
     # Save file
     try:
@@ -112,7 +117,7 @@ def parse_road(name):
     string1 = file1.read()
     file1.close()
 
-    arrays = string1.splitlines()
+    lines = string1.splitlines()
 
     inner_points = []
     outer_points = []
@@ -121,13 +126,14 @@ def parse_road(name):
     back_check = []
     all_arrays = [inner_points, outer_points, distance_check, finish, back_check]
 
-    for i in range(0, len(arrays)):
-        pts = arrays[i].split(",,")
+    for i in range(0, len(all_arrays)):
+        pts = lines[i].split(",,")
         for pt in pts:
             xy = pt.split(",")
             all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
+    starting_direction = float(lines[5])
 
-    return road.Road(inner_points, outer_points, distance_check, finish, back_check)
+    return road.Road(inner_points, outer_points, distance_check, finish, back_check, starting_direction)
 
 
 def fetch_road():
