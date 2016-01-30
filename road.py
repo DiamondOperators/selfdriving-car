@@ -8,27 +8,30 @@ window_height = 400
 
 class Road(object):
     def __init__(self, inner_points=None, outer_points=None, distance_check_points=None,
-                 finish=None, back_check=None, starting_direction=None):
+                 start=None, back_check=None, finish=None, starting_direction=None):
         self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         self.rw = 50  # Road width
         self.road = []
         self.lines = []
         self.cars = []
-        self.finish = None
+        self.start = None
         self.starting_direction = None
         self.margin = 2
         self.back_check = None
+        self.finish = None
         self.distance_check = []
 
         if inner_points is not None and outer_points is not None \
-                and distance_check_points is not None and finish is not None \
-                and back_check is not None and starting_direction is not None:
+                and distance_check_points is not None and start is not None \
+                and back_check is not None and starting_direction is not None \
+                and finish is not None:
             self.inner_points = inner_points
             self.outer_points = outer_points
             self.distance_check_points = distance_check_points
             self.make_lines()
-            self.finish = finish[0]
+            self.start = start[0]
             self.back_check = Line(back_check[0], back_check[1])
+            self.finish = Line(finish[0], finish[1])
             self.starting_direction = starting_direction
 
     def make_lines(self):
@@ -51,15 +54,11 @@ class Road(object):
             except GraphicsError:
                 pass
 
-        try:
-            self.finish.draw(self.win)
-        except GraphicsError:
-            pass
-
-        try:
-            self.back_check.draw(self.win)
-        except GraphicsError:
-            pass
+        for thing in [self.start, self.finish, self.back_check]:
+            try:
+                thing.draw(self.win)
+            except GraphicsError:
+                pass
 
         for car in self.cars:
             Point(car.x, car.y).draw(self.win)
@@ -117,7 +116,7 @@ class Road(object):
     def reset_cars(self):
         for car in self.cars:
             car.checked = False
-            car.set_position(self.finish.x, self.finish.y)
+            car.set_position(self.start.x, self.start.y)
             car.collide_distance = -1
             car.direction = self.starting_direction
 

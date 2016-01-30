@@ -31,8 +31,9 @@ def make_road():
     inner_points = []
     outer_points = []
     distance_check = []
-    finish = []
+    start = []
     back_check = []
+    finish = []
     editing_now = inner_points
 
     print "Start drawing the inner points. Click the button when you're done."
@@ -42,14 +43,16 @@ def make_road():
 
         if button_left2 <= mouse.x <= button_right2 and button_top2 <= mouse.y <= button_right2:
             # Left button was clicked
-            if len(editing_now) < 3 or editing_now is finish or editing_now is back_check:
+            if len(editing_now) < 3 or editing_now is start \
+                    or editing_now is back_check or editing_now is finish:
                 print "You cannot perform that operation"
                 continue
             mouse = Point(editing_now[0].x, editing_now[0].y)
 
         elif button_left <= mouse.x <= button_right and button_top <= mouse.y <= button_right:
             # Right button was clicked
-            if len(editing_now) < 3 and editing_now is not finish and editing_now is not back_check:
+            if len(editing_now) < 3 and editing_now is not start and editing_now is not back_check \
+                    and editing_now is not finish:
                 print "Please draw something"
                 continue
 
@@ -61,12 +64,15 @@ def make_road():
                 editing_now = distance_check
                 print "And now the distance check."
             elif editing_now is distance_check:
-                editing_now = finish
+                editing_now = start
                 print "Now put a dot for the starting point and finish"
-            elif editing_now is finish:
+            elif editing_now is start:
                 editing_now = back_check
                 print "Now draw the back check"
             elif editing_now is back_check:
+                editing_now = finish
+                print "Finish"
+            elif editing_now is finish:
                 break
             continue
 
@@ -81,12 +87,12 @@ def make_road():
 
     print "Starting direction"
     mouse = win.getMouse()
-    starting_direction = math.atan2(float(mouse.y) - float(finish[0].y), float(mouse.x) - float(finish[0].x))
+    starting_direction = math.atan2(float(mouse.y) - float(start[0].y), float(mouse.x) - float(start[0].x))
     print "Calculated direction:", starting_direction, "radians"
 
     # Construct file
     string = ""
-    for array in [inner_points, outer_points, distance_check, finish, back_check]:
+    for array in [inner_points, outer_points, distance_check, start, back_check, finish]:
         for i in range(0, len(array)):
             string += str(array[i].x) + "," + str(array[i].y)
 
@@ -122,18 +128,19 @@ def parse_road(name):
     inner_points = []
     outer_points = []
     distance_check = []
-    finish = []
+    start = []
     back_check = []
-    all_arrays = [inner_points, outer_points, distance_check, finish, back_check]
+    finish = []
+    all_arrays = [inner_points, outer_points, distance_check, start, back_check, finish]
 
     for i in range(0, len(all_arrays)):
         pts = lines[i].split(",,")
         for pt in pts:
             xy = pt.split(",")
             all_arrays[i].append(Point(int(xy[0]), int(xy[1])))
-    starting_direction = float(lines[5])
+    starting_direction = float(lines[6])
 
-    return road.Road(inner_points, outer_points, distance_check, finish, back_check, starting_direction)
+    return road.Road(inner_points, outer_points, distance_check, start, back_check, finish, starting_direction)
 
 
 def fetch_road():
