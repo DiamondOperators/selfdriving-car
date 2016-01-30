@@ -140,7 +140,7 @@ class Road(object):
         result = []
 
         # Hier is de maximale kijkhoek van de auto 120 graden oftewel 2/3*pi radialen
-        view_angle = 2. / 3 * math.pi
+        view_angle = 1. * math.pi
         num_of_sensors = main.ann.inputNodes
         angle_per_sensor = view_angle / (num_of_sensors - 1)
         first_sensor_angle = car.direction - view_angle / 2

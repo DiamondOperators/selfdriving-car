@@ -3,7 +3,7 @@ import tensorflow as tf
 
 class ANN:
     def __init__(self):
-        self.inputNodes = 7
+        self.inputNodes = 9
         self.hiddenNodes = 64
         self.hiddenNodes2 = 64  # weight3
         self.outputNodes = 1
