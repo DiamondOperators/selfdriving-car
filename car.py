@@ -8,7 +8,7 @@ class Car(object):
         self.id = randint(0, 1000)
         self.x = float(x)
         self.y = float(y)
-        self.speed = 1  # px per second
+        self.speed = 2  # px per second
         self.direction = direction  # 0 = rechts, radialen
         self.collide_distance = collide_distance
         self.W1 = []
