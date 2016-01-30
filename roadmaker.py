@@ -19,7 +19,7 @@ def make_road():
     button = Rectangle(Point(button_left, button_top), Point(button_right, button_bottom))
     button.draw(win)
 
-    # Button to finish the lapse using a circle
+    # Maak de weg rond
     button_left2 = road.window_width - 2 * button_margin - 2 * button_width
     button_top2 = road.window_height - button_margin - button_height
     button_right2 = road.window_width - 2 * button_margin - button_width
