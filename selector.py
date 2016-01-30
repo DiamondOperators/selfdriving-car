@@ -66,12 +66,3 @@ class Selector:
         print "Best car id:", self.cars[0].id, "\n"
 
         time.sleep(.3)
-
-
-def make_road():
-    new_road = Road()
-    points = [Point(100, 100), Point(300, 50), Point(500, 100), Point(501, 200), Point(450, 300),
-              Point(300, 340), Point(150, 320), Point(50, 250)]
-    check_line = Line(Point(140, 100), Point(140, 10))
-    new_road.set_road(points, Point(100, 70), check_line)
-    return new_road

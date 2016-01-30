@@ -25,11 +25,11 @@ class Road(object):
             self.inner_points = inner_points
             self.outer_points = outer_points
             self.distance_check_points = distance_check_points
-            self.make_lines2()
+            self.make_lines()
             self.finish = finish[0]
             self.back_check = Line(back_check[0], back_check[1])
 
-    def make_lines2(self):
+    def make_lines(self):
         # Clear lists
         self.lines = []
         self.distance_check = []
@@ -47,57 +47,6 @@ class Road(object):
                 self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[0]))
             else:
                 self.distance_check.append(Line(self.distance_check_points[i], self.distance_check_points[i + 1]))
-
-    def set_road(self, points, finish, check_line):
-        self.road = points
-        self.make_lines()
-        self.finish = finish
-        self.back_check = check_line
-
-    def make_lines(self):
-        self.lines = []
-        self.distance_check = []
-
-        # Inner lines
-        for i in range(0, len(self.road)):
-            if i == len(self.road) - 1:
-                self.lines.append(Line(self.road[i], self.road[0]))
-            else:
-                self.lines.append(Line(self.road[i], self.road[i + 1]))
-
-        # Copy to distance_check
-        for i in self.lines:
-            self.distance_check.append(i)
-
-        # Outer points
-        outer_points = []
-        for i in range(0, len(self.road)):
-            pt1 = self.road[i]
-            if i == len(self.road) - 1:
-                pt2 = self.road[0]
-            else:
-                pt2 = self.road[i + 1]
-
-            x_diff = float(pt2.x - pt1.x)
-            y_diff = float(pt2.y - pt1.y)
-            alpha = math.atan(y_diff / x_diff)
-
-            x = self.rw * math.sin(alpha)
-            y = self.rw * math.cos(alpha)
-
-            if x_diff < 0:
-                outer_points.append(Point(pt1.x - x, pt1.y + y))
-                outer_points.append(Point(pt2.x - x, pt2.y + y))
-            else:
-                outer_points.append(Point(pt1.x + x, pt1.y - y))
-                outer_points.append(Point(pt2.x + x, pt2.y - y))
-
-        # Outer lines
-        for i in range(0, len(outer_points)):
-            if i == len(outer_points) - 1:
-                self.lines.append(Line(outer_points[i], outer_points[0]))
-            else:
-                self.lines.append(Line(outer_points[i], outer_points[i + 1]))
 
     def redraw(self):
         for line in self.lines + self.distance_check:
@@ -171,7 +120,6 @@ class Road(object):
 
     def reset_cars(self):
         for car in self.cars:
-            #if car.collide_distance == -1:
             car.checked = False
             car.set_position(self.finish.x, self.finish.y)
             car.collide_distance = -1
