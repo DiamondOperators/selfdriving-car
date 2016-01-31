@@ -4,6 +4,7 @@ from road import *
 from car import *
 import roadmaker
 import time
+import tensorflow as tf
 
 
 class Selector:
@@ -14,6 +15,10 @@ class Selector:
         self.max_fitness = 0
         self.avg_fitness = 0
         self.generation = 0
+        self.writer = tf.train.SummaryWriter("./logs", main.ann.session.graph_def)
+        self.avg_placeholder = tf.placeholder("float32")
+        self.avg_summary = tf.scalar_summary(["Average summary"], self.avg_placeholder)
+        main.ann.session.run(tf.initialize_all_variables())
 
     def initial_generation(self):
         # Add {self.population_size} random cars
@@ -38,11 +43,18 @@ class Selector:
         self.test_generation()
 
         while 1 + 1 == 2:
-            self.generation += 1
-            self.road.reset_win()
-            self.create_next_generation()
-            if self.test_generation():
+            try:
+                self.generation += 1
+                self.road.reset_win()
+                self.create_next_generation()
+                if self.test_generation():
+                    break
+            except GraphicsError or KeyboardInterrupt:
+                # Window has been closed or Ctrl-C has been pressed
                 break
+
+        self.writer.flush()
+        self.writer.close()
 
     def test_generation(self):
         try:
@@ -88,6 +100,10 @@ class Selector:
         if finished >= .5 * len(self.cars):
             print "Goal achieved in", self.generation, "generations"
             return True
+
+        summary = main.ann.session.run(
+            self.avg_summary, feed_dict={self.avg_placeholder: [self.avg_fitness]})
+        self.writer.add_summary(summary, self.generation)
 
         print
 
