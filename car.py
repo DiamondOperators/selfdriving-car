@@ -16,6 +16,7 @@ class Car(object):
         self.W3 = []  # weight3
         self.mutation_rate = .1
         self.checked = False
+        self.finished = False
 
         # De range van de sensoren, in pixels; wordt gebruikt in road.get_sensor_data()
         self.sensor_range = 200

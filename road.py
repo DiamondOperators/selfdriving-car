@@ -91,7 +91,7 @@ class Road(object):
                     car.collide_distance = self.collide_distance(car)
 
                 if self.point_collides_with_line(self.finish, car.x, car.y) and car.checked:
-                    print "Car finished!"
+                    car.finished = True
                     car.collide_distance = self.collide_distance(car)
 
                 if self.point_collides_with_line(self.back_check, car.x, car.y):
@@ -120,6 +120,7 @@ class Road(object):
     def reset_cars(self):
         for car in self.cars:
             car.checked = False
+            car.finished = False
             car.set_position(self.start.x, self.start.y)
             car.collide_distance = -1
             car.direction = self.starting_direction
