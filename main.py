@@ -1,7 +1,6 @@
 from ANN import *
 from selector import *
-
-# from backpropagator import *
+from backpropagator import *
 
 ann = ANN()
 
@@ -12,7 +11,7 @@ def func():
         selector = Selector()
         selector.start()
     elif option == 2:
-        pass
+        Backpropagator()
     else:
         print "Please choose 1 or 2 or press Ctrl-C"
         func()

@@ -1,5 +1,6 @@
 import road
 from road import *
+from graphics import *
 
 
 def make_road():
