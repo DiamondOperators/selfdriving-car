@@ -140,7 +140,7 @@ class Road(object):
     def get_sensor_data(self, car):
         result = []
 
-        # Hier is de maximale kijkhoek van de auto 120 graden oftewel 2/3*pi radialen
+        # Hier is de maximale kijkhoek van de auto 180 graden oftewel pi radialen
         view_angle = 1. * math.pi
         num_of_sensors = main.ann.inputNodes
         angle_per_sensor = view_angle / (num_of_sensors - 1)

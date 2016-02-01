@@ -2,6 +2,9 @@ import random
 from random import randint
 import main
 
+mutation_chance = 25
+mutation_rate = .1
+
 
 class Car(object):
     def __init__(self, parents=None, collide_distance=-1, direction=0, x=0, y=0):
@@ -14,7 +17,6 @@ class Car(object):
         self.W1 = []
         self.W2 = []
         self.W3 = []  # weight3
-        self.mutation_rate = .1
         self.checked = False
         self.finished = False
 
@@ -41,9 +43,9 @@ class Car(object):
             w1i = []
             for j in range(W12length):
                 value = parent.W1[i][j]
-                mutation_chance = randint(1, 100)
-                if mutation_chance <= 25:
-                    perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                mutation_random = randint(1, 100)
+                if mutation_random <= mutation_chance:
+                    perc = random.random() * mutation_rate * 2 - mutation_rate
                     value += perc * value
                 w1i.append(value)
             self.W1.append(w1i)
@@ -53,9 +55,9 @@ class Car(object):
             w2i = []
             for j in range(W22length):
                 value = parent.W2[i][j]
-                mutation_chance = randint(1, 100)
-                if mutation_chance <= 25:
-                    perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                mutation_random = randint(1, 100)
+                if mutation_random <= mutation_chance:
+                    perc = random.random() * mutation_rate * 2 - mutation_rate
                     value += perc * value
                 w2i.append(value)
             self.W2.append(w2i)
@@ -65,9 +67,9 @@ class Car(object):
             w3i = []
             for j in range(W32length):
                 value = parent.W3[i][j]
-                mutation_chance = randint(1, 100)
-                if mutation_chance <= 25:
-                    perc = random.random() * self.mutation_rate * 2 - self.mutation_rate
+                mutation_random = randint(1, 100)
+                if mutation_random <= mutation_chance:
+                    perc = random.random() * mutation_rate * 2 - mutation_rate
                     value += perc * value
                 w3i.append(value)
             self.W3.append(w3i)

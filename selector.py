@@ -7,6 +7,8 @@ import numpy as np
 import os
 import time
 
+stay_alive = .5
+
 
 class Selector:
     def __init__(self):
@@ -24,14 +26,14 @@ class Selector:
             self.cars.append(Car())
 
     def create_next_generation(self):
-        stay_alive = int(len(self.cars) * .5)
+        stay_alive_cars = int(len(self.cars) * stay_alive)
         parents = []
-        for i in range(0, stay_alive):
+        for i in range(0, stay_alive_cars):
             parents.append(self.cars[i])
 
         # The best 10 cars are now in the first 10 indices of the array.
         # Substitute the last 10 cars in the array with new ones.
-        for i in xrange(stay_alive, len(self.cars)):
+        for i in xrange(stay_alive_cars, len(self.cars)):
             self.cars[i] = Car(parents)
 
     def start(self):
