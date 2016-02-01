@@ -2,6 +2,7 @@ from road import *
 import road
 from backpropcar import *
 import roadmaker
+from graphics import *
 
 train_interval = 10
 
@@ -24,7 +25,8 @@ class Backpropagator:
         step = 0
 
         while not self.road.car_collided(self.car):
-            if step % train_interval == 0 and step != 0:
+            step += 1
+            if step % train_interval == 0:
                 distances = []
                 for line in self.road.distance_check:
                     distances.append(road.distance_to_line_segment(line, self.car))
@@ -50,5 +52,4 @@ class Backpropagator:
             # if self.road.point_collides_with_line(self.road.back_check, car.x, car.y):
             #     self.car.checked = True
             self.road.redraw()
-
-            step += 1
+            Point(self.car.x, self.car.y).draw(self.road.win)
