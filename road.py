@@ -233,6 +233,20 @@ class Road(object):
         distance = abs(a * x + b * y + c) / math.sqrt(a ** 2 + b ** 2)
         return distance < self.margin
 
+    def desired_direction(self, car):
+        distances = []
+        for line in self.distance_check:
+            distances.append(distance_to_line_segment(line, car))
+        index = distances.index(min(distances))
+        current_segment = self.distance_check[index]
+
+        if math.sqrt((car.x - current_segment.p2.x) ** 2 + (car.y - current_segment.p2.y) ** 2) < 10 \
+                and index < len(self.distance_check) - 1:
+            current_segment = self.distance_check[index + 1]
+
+        return math.atan2(float(current_segment.p2.y) - float(car.y),
+                          float(current_segment.p2.x) - float(car.x))
+
 
 def out_of_range(line, x, y):
     minx = min(line.p1.x, line.p2.x)
