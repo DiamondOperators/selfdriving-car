@@ -3,6 +3,8 @@
 from road import *
 from car import *
 import roadmaker
+import numpy as np
+import os
 import time
 
 
@@ -34,15 +36,67 @@ class Selector:
 
     def start(self):
         self.initial_generation()
+
+        while 1 + 1 == 2:
+            weigths_dir = raw_input("Which weights do you want to load? Leave blank to start with random weights ")
+            if weigths_dir == "":
+                break
+            else:
+                try:
+                    dirs = [x[0] for x in os.walk("weights/" + weigths_dir)][1:]
+                    if len(dirs) < self.population_size:
+                        print "Changing population size to", len(dirs)
+                        self.population_size = len(dirs)
+                        self.initial_generation()
+
+                    for i in range(0, self.population_size):
+                        car_dir = "weights/" + weigths_dir + "/" + str(i)
+                        self.cars[i].W1 = np.load(car_dir + "/W1")
+                        self.cars[i].W2 = np.load(car_dir + "/W2")
+                        self.cars[i].W3 = np.load(car_dir + "/W3")  # weight3
+                    print "Weigths loaded"
+                    break
+                except IOError:
+                    pass
+
         self.generation = 0
         self.test_generation()
 
-        while 1 + 1 == 2:
-            self.generation += 1
-            self.road.reset_win()
-            self.create_next_generation()
-            if self.test_generation():
-                break
+        try:
+            while 1 + 1 == 2:
+                self.generation += 1
+                self.road.reset_win()
+                self.create_next_generation()
+                if self.test_generation():
+                    break
+        except KeyboardInterrupt or GraphicsError:
+            pass
+
+        save = raw_input("Save weights? [Y/n] ")
+        if save == "y" or save == "Y" or save == "":
+            name = raw_input("How do you want to call it? Leave blank for timestamp ")
+            if name == "":
+                name = str(time.time())
+            try:
+                os.mkdir("weights")
+            except OSError:
+                pass  # Directory already existed
+            try:
+                os.mkdir("weights/" + name)
+            except OSError:
+                # Override existing directory
+                os.rmdir("weigths/" + name)
+                os.mkdir("weights/" + name)
+
+            for i in range(0, len(self.cars) - 1):
+                car_dir = "weights/" + name + "/" + str(i)
+                os.mkdir(car_dir)
+                np.array(self.cars[i].W1).dump(car_dir + "/W1")
+                np.array(self.cars[i].W2).dump(car_dir + "/W2")
+                np.array(self.cars[i].W3).dump(car_dir + "/W3")  # weight3
+            print "Done"
+        else:
+            print "OK"
 
     def test_generation(self):
         try:

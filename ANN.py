@@ -9,9 +9,9 @@ class ANN:
         self.outputNodes = 1
 
         self.x = tf.placeholder("float", shape=[None, self.inputNodes], name="sensor-input")
-        self.W1 = tf.placeholder("float", shape=[self.inputNodes, self.hiddenNodes])
-        self.W2 = tf.placeholder("float", shape=[self.hiddenNodes, self.hiddenNodes2])  # weight3
-        self.W3 = tf.placeholder("float", shape=[self.hiddenNodes2, self.outputNodes])  # weight3
+        self.W1 = tf.placeholder("float", shape=[self.inputNodes, self.hiddenNodes], name="W1")
+        self.W2 = tf.placeholder("float", shape=[self.hiddenNodes, self.hiddenNodes2], name="W2")  # weight3
+        self.W3 = tf.placeholder("float", shape=[self.hiddenNodes2, self.outputNodes], name="W3")  # weight3
         self.y = tf.tanh(
             tf.matmul(tf.tanh(tf.matmul(tf.tanh(tf.matmul(self.x, self.W1)), self.W2)), self.W3))  # weight3
 
