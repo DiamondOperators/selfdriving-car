@@ -4,7 +4,7 @@
 import tensorflow as tf
 import main
 
-stddev = .2  # Standard deviation for random weights
+stddev = .05  # Standard deviation for random weights
 
 
 class BackpropCar:
@@ -24,8 +24,8 @@ class BackpropCar:
             tf.matmul(tf.tanh(tf.matmul(tf.tanh(tf.matmul(self.input, self.W1)), self.W2)), self.W3))  # weight3
 
         self.y_ = tf.placeholder("float", shape=[None, 1], name="proper_output")
-        self.cost = tf.reduce_mean(tf.square(self.output - self.y_))  # Is this a good cost function?
-        self.trainer = tf.train.GradientDescentOptimizer(0.8).minimize(self.cost)
+        self.cost = tf.reduce_sum(tf.square(self.output - self.y_))  # Is this a good cost function?
+        self.trainer = tf.train.GradientDescentOptimizer(0.001).minimize(self.cost)
 
         self.session = tf.Session()
         self.session.run(tf.initialize_all_variables())
@@ -35,6 +35,6 @@ class BackpropCar:
 
     def train(self, x, y_):
         print "Cost function output before:", self.session.run(self.cost, feed_dict={self.input: x, self.y_: y_})
-        for i in xrange(100):
+        for i in xrange(50):
             self.session.run(self.trainer, feed_dict={self.input: x, self.y_: y_})
         print "Cost function output after :", self.session.run(self.cost, feed_dict={self.input: x, self.y_: y_})

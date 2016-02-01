@@ -4,7 +4,7 @@ from backpropcar import *
 import roadmaker
 from graphics import *
 
-train_interval = 10
+train_interval = 5
 
 
 class Backpropagator:
@@ -25,12 +25,17 @@ class Backpropagator:
         step = 0
 
         while not self.road.car_collided(self.car):
-            step += 1
             if step % train_interval == 0:
                 distances = []
                 for line in self.road.distance_check:
                     distances.append(road.distance_to_line_segment(line, self.car))
-                current_segment = self.road.distance_check[distances.index(min(distances))]
+                index = distances.index(min(distances))
+                current_segment = self.road.distance_check[index]
+
+                if math.sqrt((self.car.x - current_segment.p2.x) ** 2 +
+                                             (self.car.y - current_segment.p2.y) ** 2) < 10 \
+                        and index < len(self.road.distance_check) - 1:
+                    current_segment = self.road.distance_check[index + 1]
 
                 desired_direction = math.atan2(float(current_segment.p2.y) - float(self.car.y),
                                                float(current_segment.p2.x) - float(self.car.x))
@@ -47,9 +52,11 @@ class Backpropagator:
 
             if self.road.car_collided(self.car):
                 self.car.collide_distance = self.road.collide_distance(self.car)
-                print "Collide distance:", self.car.collide_distance
+                print "\nCollide distance:", self.car.collide_distance, "\n"
 
             # if self.road.point_collides_with_line(self.road.back_check, car.x, car.y):
             #     self.car.checked = True
             self.road.redraw()
             Point(self.car.x, self.car.y).draw(self.road.win)
+
+            step += 1
