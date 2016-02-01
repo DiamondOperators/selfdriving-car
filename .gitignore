@@ -2,3 +2,4 @@
 /.idea
 .codenvy
 requirements.txt
+/weights
