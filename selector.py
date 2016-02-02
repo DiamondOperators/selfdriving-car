@@ -55,7 +55,7 @@ class Selector:
                         car_dir = "weights/" + weigths_dir + "/" + str(i)
                         self.cars[i].W1 = np.load(car_dir + "/W1")
                         self.cars[i].W2 = np.load(car_dir + "/W2")
-                        self.cars[i].W3 = np.load(car_dir + "/W3")  # weight3
+                        # self.cars[i].W3 = np.load(car_dir + "/W3")  # weight3
                     print "Weigths loaded"
                     break
                 except IOError:
@@ -95,7 +95,7 @@ class Selector:
                 os.mkdir(car_dir)
                 np.array(self.cars[i].W1).dump(car_dir + "/W1")
                 np.array(self.cars[i].W2).dump(car_dir + "/W2")
-                np.array(self.cars[i].W3).dump(car_dir + "/W3")  # weight3
+                # np.array(self.cars[i].W3).dump(car_dir + "/W3")  # weight3
             print "Done"
         else:
             print "OK"
