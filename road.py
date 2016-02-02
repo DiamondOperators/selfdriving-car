@@ -64,8 +64,13 @@ class Road(object):
             Point(car.x, car.y).draw(self.win)
 
     def reset_win(self):
-        self.win.close()
-        self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
+        for item in self.win.items[:]:
+            item.undraw()
+        del self.win.items[:]
+        self.win.update()
+
+        # self.win.close()
+        # self.win = GraphWin(title="Self-driving car", width=window_width, height=window_height)
         # Also clear self.cars array, to start with a clean window
         self.cars = []
         self.redraw()

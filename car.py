@@ -2,7 +2,7 @@ import random
 from random import randint
 import main
 
-mutation_chance = 100
+mutation_chance = 25
 mutation_rate = .1
 
 
