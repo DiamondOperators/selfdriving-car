@@ -310,29 +310,3 @@ def closest_end_point(line, x, y):
 def length_of_line(line):
     return math.sqrt((line.p1.x - line.p2.x) ** 2 + (line.p1.y - line.p2.y) ** 2)
 
-# import roadmaker
-# from car import *
-# from ANN import *
-#
-#
-# def test():
-#     # Test
-#     main.ann = ANN()
-#     road = roadmaker.fetch_road()
-#     distance_check_pts = [Point(100, 100), Point(200, 100), Point(200, 200), Point(100, 200)]
-#     distance_check_lines = []
-#     for i in range(0, len(distance_check_pts)):
-#         if i == len(distance_check_pts) - 1:
-#             distance_check_lines.append(Line(distance_check_pts[i], distance_check_pts[0]))
-#         else:
-#             distance_check_lines.append(Line(distance_check_pts[i], distance_check_pts[i + 1]))
-#     road.distance_check = distance_check_lines
-#     road.redraw()
-#     for i in road.distance_check:
-#         i.draw(road.win)
-#     car = Car()
-#     while True:
-#         mouse = road.win.getMouse()
-#         car.x = mouse.x
-#         car.y = mouse.y
-#         road.collide_distance(car)

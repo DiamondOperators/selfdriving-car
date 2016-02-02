@@ -68,7 +68,7 @@ def make_road():
                 print "And now the distance check."
             elif editing_now is distance_check:
                 editing_now = start
-                print "Now put a dot for the starting point and finish"
+                print "Now put a dot for the starting point"
             elif editing_now is start:
                 editing_now = back_check
                 print "Now draw the back check"

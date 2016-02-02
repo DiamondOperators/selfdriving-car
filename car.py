@@ -3,7 +3,7 @@ from random import randint
 import main
 
 mutation_chance = 25
-mutation_rate = .1
+mutation_rate = .4
 
 
 class Car(object):
