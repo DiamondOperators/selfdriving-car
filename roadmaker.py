@@ -8,8 +8,8 @@ def make_road():
     win = GraphWin(title="Road maker", width=road.window_width, height=road.window_height)
     win.setBackground(color_rgb(255, 255, 255))
 
-    button_width = 50
-    button_height = 10
+    button_width = 70
+    button_height = 15
     button_margin = 5
 
     # 'Done' button
@@ -27,6 +27,8 @@ def make_road():
     button_bottom2 = road.window_height - button_margin
     button2 = Rectangle(Point(button_left2, button_top2), Point(button_right2, button_bottom2))
     button2.draw(win)
+    Text(button.getCenter(), "Next line type").draw(win)
+    Text(button2.getCenter(), "Finish line").draw(win)
 
     # Make point arrays
     inner_points = []
