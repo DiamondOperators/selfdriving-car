@@ -8,8 +8,8 @@ def make_road():
     win = GraphWin(title="Road maker", width=road.window_width, height=road.window_height)
     win.setBackground(color_rgb(255, 255, 255))
 
-    button_width = 70
-    button_height = 15
+    button_width = 100
+    button_height = 20
     button_margin = 5
 
     # 'Done' button
